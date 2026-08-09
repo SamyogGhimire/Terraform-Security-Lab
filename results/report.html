@@ -1,0 +1,861 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Terraform Security Validation Report</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background: #f5f7fa;
+        }
+
+        h1 {
+            margin-bottom: 5px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        pre {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+
+        .success {
+            padding: 12px;
+            background: #dcfce7;
+            border-radius: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>Terraform Security Validation Prototype</h1>
+
+<p>
+Generated: 2026-08-09 23:54:41
+</p>
+
+<div class="card">
+    <h2>Validation Pipeline</h2>
+
+    <div class="success">
+        Terraform → Checkov → Trivy → Custom IAM Analysis
+    </div>
+</div>
+
+<div class="card">
+    <h2>Custom Cross-Resource IAM Analysis</h2>
+
+    <pre>CUSTOM CROSS-RESOURCE IAM CHECK
+========================================
+PassRole files: [&#x27;04-cross-resource-iam/main.tf&#x27;]
+RunInstances files: [&#x27;04-cross-resource-iam/main.tf&#x27;]
+RESULT: POTENTIAL CROSS-RESOURCE PRIVILEGE PATH
+</pre>
+</div>
+
+<div class="card">
+    <h2>Checkov Results</h2>
+
+    <pre>{
+    &quot;check_type&quot;: &quot;terraform&quot;,
+    &quot;results&quot;: {
+        &quot;passed_checks&quot;: [
+            {
+                &quot;check_id&quot;: &quot;CKV_AWS_93&quot;,
+                &quot;bc_check_id&quot;: &quot;BC_AWS_S3_24&quot;,
+                &quot;check_name&quot;: &quot;Ensure S3 bucket policy does not lockout all but root user. (Prevent lockouts needing root account fixes)&quot;,
+                &quot;check_result&quot;: {
+                    &quot;result&quot;: &quot;PASSED&quot;,
+                    &quot;evaluated_keys&quot;: [
+                        &quot;policy&quot;
+                    ]
+                },
+                &quot;code_block&quot;: [
+                    [
+                        1,
+                        &quot;resource \&quot;aws_s3_bucket\&quot; \&quot;public_data\&quot; {\n&quot;
+                    ],
+                    [
+                        2,
+                        &quot;  bucket = \&quot;research-public-data-example\&quot;\n&quot;
+                    ],
+                    [
+                        3,
+                        &quot;}\n&quot;
+                    ]
+                ],
+                &quot;file_path&quot;: &quot;/01-public-s3/main.tf&quot;,
+                &quot;file_abs_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/01-public-s3/main.tf&quot;,
+                &quot;repo_file_path&quot;: &quot;/cases/01-public-s3/main.tf&quot;,
+                &quot;file_line_range&quot;: [
+                    1,
+                    3
+                ],
+                &quot;resource&quot;: &quot;aws_s3_bucket.public_data&quot;,
+                &quot;evaluations&quot;: null,
+                &quot;check_class&quot;: &quot;checkov.terraform.checks.resource.aws.S3ProtectAgainstPolicyLockout&quot;,
+                &quot;fixed_definition&quot;: null,
+                &quot;entity_tags&quot;: null,
+                &quot;caller_file_path&quot;: null,
+                &quot;caller_file_line_range&quot;: null,
+                &quot;resource_address&quot;: null,
+                &quot;severity&quot;: null,
+                &quot;bc_category&quot;: null,
+                &quot;benchmarks&quot;: null,
+                &quot;description&quot;: null,
+                &quot;short_description&quot;: null,
+                &quot;vulnerability_details&quot;: null,
+                &quot;connected_node&quot;: null,
+                &quot;guideline&quot;: &quot;https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/s3-policies/bc-aws-s3-24&quot;,
+                &quot;details&quot;: [],
+                &quot;check_len&quot;: null,
+                &quot;definition_context_file_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/01-public-s3/main.tf&quot;
+            },
+            {
+                &quot;check_id&quot;: &quot;CKV_AWS_277&quot;,
+                &quot;bc_check_id&quot;: &quot;BC_AWS_NETWORKING_78&quot;,
+                &quot;check_name&quot;: &quot;Ensure no security groups allow ingress from 0.0.0.0:0 to port -1&quot;,
+                &quot;check_result&quot;: {
+                    &quot;result&quot;: &quot;PASSED&quot;,
+                    &quot;evaluated_keys&quot;: []
+                },
+                &quot;code_block&quot;: [
+                    [
+                        1,
+                        &quot;resource \&quot;aws_security_group\&quot; \&quot;open_web\&quot; {\n&quot;
+                    ],
+                    [
+                        2,
+                        &quot;  name = \&quot;research-open-web\&quot;\n&quot;
+                    ],
+                    [
+                        3,
+                        &quot;  ingress {\n&quot;
+                    ],
+                    [
+                        4,
+                        &quot;    from_port = 0\n&quot;
+                    ],
+                    [
+                        5,
+                        &quot;    to_port = 65535\n&quot;
+                    ],
+                    [
+                        6,
+                        &quot;    protocol = \&quot;tcp\&quot;\n&quot;
+                    ],
+                    [
+                        7,
+                        &quot;    cidr_blocks = [\&quot;0.0.0.0/0\&quot;]\n&quot;
+                    ],
+                    [
+                        8,
+                        &quot;  }\n&quot;
+                    ],
+                    [
+                        9,
+                        &quot;  egress {\n&quot;
+                    ],
+                    [
+                        10,
+                        &quot;    from_port = 0\n&quot;
+                    ],
+                    [
+                        11,
+                        &quot;    to_port = 0\n&quot;
+                    ],
+                    [
+                        12,
+                        &quot;    protocol = \&quot;-1\&quot;\n&quot;
+                    ],
+                    [
+                        13,
+                        &quot;    cidr_blocks = [\&quot;0.0.0.0/0\&quot;]\n&quot;
+                    ],
+                    [
+                        14,
+                        &quot;  }\n&quot;
+                    ],
+                    [
+                        15,
+                        &quot;}\n&quot;
+                    ]
+                ],
+                &quot;file_path&quot;: &quot;/02-open-security-group/main.tf&quot;,
+                &quot;file_abs_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/02-open-security-group/main.tf&quot;,
+                &quot;repo_file_path&quot;: &quot;/cases/02-open-security-group/main.tf&quot;,
+                &quot;file_line_range&quot;: [
+                    1,
+                    15
+                ],
+                &quot;resource&quot;: &quot;aws_security_group.open_web&quot;,
+                &quot;evaluations&quot;: null,
+                &quot;check_class&quot;: &quot;checkov.terraform.checks.resource.aws.SecurityGroupUnrestrictedIngressAny&quot;,
+                &quot;fixed_definition&quot;: null,
+                &quot;entity_tags&quot;: null,
+                &quot;caller_file_path&quot;: null,
+                &quot;caller_file_line_range&quot;: null,
+                &quot;resource_address&quot;: null,
+                &quot;severity&quot;: null,
+                &quot;bc_category&quot;: null,
+                &quot;benchmarks&quot;: null,
+                &quot;description&quot;: null,
+                &quot;short_description&quot;: null,
+                &quot;vulnerability_details&quot;: null,
+                &quot;connected_node&quot;: null,
+                &quot;guideline&quot;: &quot;https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-networking-policies/ensure-aws-security-group-does-not-allow-all-traffic-on-all-ports&quot;,
+                &quot;details&quot;: [],
+                &quot;check_len&quot;: null,
+                &quot;definition_context_file_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/02-open-security-group/main.tf&quot;
+            },
+            {
+                &quot;check_id&quot;: &quot;CKV_AWS_287&quot;,
+                &quot;bc_check_id&quot;: &quot;BC_AWS_IAM_82&quot;,
+                &quot;check_name&quot;: &quot;Ensure IAM policies does not allow credentials exposure&quot;,
+                &quot;check_result&quot;: {
+                    &quot;result&quot;: &quot;PASSED&quot;,
+                    &quot;evaluated_keys&quot;: []
+                },
+                &quot;code_block&quot;: [
+                    [
+                        1,
+                        &quot;resource \&quot;aws_iam_policy\&quot; \&quot;launch_policy\&quot; {\n&quot;
+                    ],
+                    [
+                        2,
+                        &quot;  name = \&quot;research-launch-policy\&quot;\n&quot;
+                    ],
+                    [
+                        3,
+                        &quot;  policy = jsonencode({\n&quot;
+                    ],
+                    [
+                        4,
+                        &quot;    Version = \&quot;2012-10-17\&quot;\n&quot;
+                    ],
+                    [
+                        5,
+                        &quot;    Statement = [{\n&quot;
+                    ],
+                    [
+                        6,
+                        &quot;      Effect = \&quot;Allow\&quot;\n&quot;
+                    ],
+                    [
+                        7,
+                        &quot;      Action = [\&quot;iam:PassRole\&quot;, \&quot;ec2:RunInstances\&quot;]\n&quot;
+                    ],
+                    [
+                        8,
+                        &quot;      Resource = \&quot;*\&quot;\n&quot;
+                    ],
+                    [
+                        9,
+                        &quot;    }]\n&quot;
+                    ],
+                    [
+                        10,
+                        &quot;  })\n&quot;
+                    ],
+                    [
+                        11,
+                        &quot;}\n&quot;
+                    ]
+                ],
+                &quot;file_path&quot;: &quot;/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_abs_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;repo_file_path&quot;: &quot;/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_line_range&quot;: [
+                    1,
+                    11
+                ],
+                &quot;resource&quot;: &quot;aws_iam_policy.launch_policy&quot;,
+                &quot;evaluations&quot;: null,
+                &quot;check_class&quot;: &quot;checkov.terraform.checks.resource.aws.IAMCredentialsExposure&quot;,
+                &quot;fixed_definition&quot;: null,
+                &quot;entity_tags&quot;: null,
+                &quot;caller_file_path&quot;: null,
+                &quot;caller_file_line_range&quot;: null,
+                &quot;resource_address&quot;: null,
+                &quot;severity&quot;: null,
+                &quot;bc_category&quot;: null,
+                &quot;benchmarks&quot;: null,
+                &quot;description&quot;: null,
+                &quot;short_description&quot;: null,
+                &quot;vulnerability_details&quot;: null,
+                &quot;connected_node&quot;: null,
+                &quot;guideline&quot;: &quot;https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/bc-aws-287&quot;,
+                &quot;details&quot;: [],
+                &quot;check_len&quot;: null,
+                &quot;definition_context_file_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/04-cross-resource-iam/main.tf&quot;
+            },
+            {
+                &quot;check_id&quot;: &quot;CKV_AWS_63&quot;,
+                &quot;bc_check_id&quot;: &quot;BC_AWS_IAM_48&quot;,
+                &quot;check_name&quot;: &quot;Ensure no IAM policies documents allow \&quot;*\&quot; as a statement&#x27;s actions&quot;,
+                &quot;check_result&quot;: {
+                    &quot;result&quot;: &quot;PASSED&quot;,
+                    &quot;evaluated_keys&quot;: [
+                        &quot;policy&quot;,
+                        &quot;inline_policy&quot;
+                    ]
+                },
+                &quot;code_block&quot;: [
+                    [
+                        1,
+                        &quot;resource \&quot;aws_iam_policy\&quot; \&quot;launch_policy\&quot; {\n&quot;
+                    ],
+                    [
+                        2,
+                        &quot;  name = \&quot;research-launch-policy\&quot;\n&quot;
+                    ],
+                    [
+                        3,
+                        &quot;  policy = jsonencode({\n&quot;
+                    ],
+                    [
+                        4,
+                        &quot;    Version = \&quot;2012-10-17\&quot;\n&quot;
+                    ],
+                    [
+                        5,
+                        &quot;    Statement = [{\n&quot;
+                    ],
+                    [
+                        6,
+                        &quot;      Effect = \&quot;Allow\&quot;\n&quot;
+                    ],
+                    [
+                        7,
+                        &quot;      Action = [\&quot;iam:PassRole\&quot;, \&quot;ec2:RunInstances\&quot;]\n&quot;
+                    ],
+                    [
+                        8,
+                        &quot;      Resource = \&quot;*\&quot;\n&quot;
+                    ],
+                    [
+                        9,
+                        &quot;    }]\n&quot;
+                    ],
+                    [
+                        10,
+                        &quot;  })\n&quot;
+                    ],
+                    [
+                        11,
+                        &quot;}\n&quot;
+                    ]
+                ],
+                &quot;file_path&quot;: &quot;/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_abs_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;repo_file_path&quot;: &quot;/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_line_range&quot;: [
+                    1,
+                    11
+                ],
+                &quot;resource&quot;: &quot;aws_iam_policy.launch_policy&quot;,
+                &quot;evaluations&quot;: null,
+                &quot;check_class&quot;: &quot;checkov.terraform.checks.resource.aws.IAMStarActionPolicyDocument&quot;,
+                &quot;fixed_definition&quot;: null,
+                &quot;entity_tags&quot;: null,
+                &quot;caller_file_path&quot;: null,
+                &quot;caller_file_line_range&quot;: null,
+                &quot;resource_address&quot;: null,
+                &quot;severity&quot;: null,
+                &quot;bc_category&quot;: null,
+                &quot;benchmarks&quot;: null,
+                &quot;description&quot;: null,
+                &quot;short_description&quot;: null,
+                &quot;vulnerability_details&quot;: null,
+                &quot;connected_node&quot;: null,
+                &quot;guideline&quot;: &quot;https://docs.prismacloud.io/en/enterprise-edition/policy-reference/aws-policies/aws-iam-policies/iam-48&quot;,
+                &quot;details&quot;: [],
+                &quot;check_len&quot;: null,
+                &quot;definition_context_file_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/04-cross-resource-iam/main.tf&quot;
+            },
+            {
+                &quot;check_id&quot;: &quot;CKV_AWS_288&quot;,
+                &quot;bc_check_id&quot;: &quot;BC_AWS_IAM_83&quot;,
+                &quot;check_name&quot;: &quot;Ensure IAM policies does not allow data exfiltration&quot;,
+                &quot;check_result&quot;: {
+                    &quot;result&quot;: &quot;PASSED&quot;,
+                    &quot;evaluated_keys&quot;: []
+                },
+                &quot;code_block&quot;: [
+                    [
+                        1,
+                        &quot;resource \&quot;aws_iam_policy\&quot; \&quot;launch_policy\&quot; {\n&quot;
+                    ],
+                    [
+                        2,
+                        &quot;  name = \&quot;research-launch-policy\&quot;\n&quot;
+                    ],
+                    [
+                        3,
+                        &quot;  policy = jsonencode({\n&quot;
+                    ],
+                    [
+                        4,
+                        &quot;    Version = \&quot;2012-10-17\&quot;\n&quot;
+                    ],
+                    [
+                        5,
+                        &quot;    Statement = [{\n&quot;
+                    ],
+                    [
+                        6,
+                        &quot;      Effect = \&quot;Allow\&quot;\n&quot;
+                    ],
+                    [
+                        7,
+                        &quot;      Action = [\&quot;iam:PassRole\&quot;, \&quot;ec2:RunInstances\&quot;]\n&quot;
+                    ],
+                    [
+                        8,
+                        &quot;      Resource = \&quot;*\&quot;\n&quot;
+                    ],
+                    [
+                        9,
+                        &quot;    }]\n&quot;
+                    ],
+                    [
+                        10,
+                        &quot;  })\n&quot;
+                    ],
+                    [
+                        11,
+                        &quot;}\n&quot;
+                    ]
+                ],
+                &quot;file_path&quot;: &quot;/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_abs_path&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;repo_file_path&quot;: &quot;/cases/04-cross-resource-iam/main.tf&quot;,
+                &quot;file_line_range&quot;: [
+                    1,
+                    11
+                ],
+                &quot;resource&quot;: &quot;aws_iam_policy.launch_policy&quot;,
+                &quot;evaluations&quot;: null,
+                &quot;check_class&quot;: &quot;checkov.terraform.checks.resource.aws.IAMDataExfiltration&quot;,
+                &quot;fixed_definition&quot;: null,
+                &quot;entity_tags&quot;: null,
+                &quot;caller_file_path&quot;: null,
+                &quot;caller_file_line_range&quot;: null,
+                &quot;resource_address&quot;: null,
+                &quot;severity&quot;: null,
+                &quot;bc_category&quot;: nul</pre>
+</div>
+
+<div class="card">
+    <h2>Trivy Results</h2>
+
+    <pre>{
+  &quot;SchemaVersion&quot;: 2,
+  &quot;CreatedAt&quot;: &quot;2026-08-09T23:50:58.695294956+05:30&quot;,
+  &quot;ArtifactName&quot;: &quot;/home/samyog-ghimire/Downloads/terraform-security-lab/cases&quot;,
+  &quot;ArtifactType&quot;: &quot;filesystem&quot;,
+  &quot;Metadata&quot;: {
+    &quot;ImageConfig&quot;: {
+      &quot;architecture&quot;: &quot;&quot;,
+      &quot;created&quot;: &quot;0001-01-01T00:00:00Z&quot;,
+      &quot;os&quot;: &quot;&quot;,
+      &quot;rootfs&quot;: {
+        &quot;type&quot;: &quot;&quot;,
+        &quot;diff_ids&quot;: null
+      },
+      &quot;config&quot;: {}
+    }
+  },
+  &quot;Results&quot;: [
+    {
+      &quot;Target&quot;: &quot;01-public-s3&quot;,
+      &quot;Class&quot;: &quot;config&quot;,
+      &quot;Type&quot;: &quot;terraform&quot;,
+      &quot;MisconfSummary&quot;: {
+        &quot;Successes&quot;: 2,
+        &quot;Failures&quot;: 0,
+        &quot;Exceptions&quot;: 0
+      }
+    },
+    {
+      &quot;Target&quot;: &quot;01-public-s3/main.tf&quot;,
+      &quot;Class&quot;: &quot;config&quot;,
+      &quot;Type&quot;: &quot;terraform&quot;,
+      &quot;MisconfSummary&quot;: {
+        &quot;Successes&quot;: 2,
+        &quot;Failures&quot;: 8,
+        &quot;Exceptions&quot;: 0
+      },
+      &quot;Misconfigurations&quot;: [
+        {
+          &quot;Type&quot;: &quot;Terraform Security Check&quot;,
+          &quot;ID&quot;: &quot;AVD-AWS-0086&quot;,
+          &quot;AVDID&quot;: &quot;AVD-AWS-0086&quot;,
+          &quot;Title&quot;: &quot;S3 Access block should block public ACL&quot;,
+          &quot;Description&quot;: &quot;\nS3 buckets should block public ACLs on buckets and any objects they contain. By blocking, PUTs with fail if the object has any public ACL a.\n&quot;,
+          &quot;Message&quot;: &quot;Public access block does not block public ACLs&quot;,
+          &quot;Query&quot;: &quot;data..&quot;,
+          &quot;Resolution&quot;: &quot;Enable blocking any PUT calls with a public ACL specified&quot;,
+          &quot;Severity&quot;: &quot;HIGH&quot;,
+          &quot;PrimaryURL&quot;: &quot;https://avd.aquasec.com/misconfig/avd-aws-0086&quot;,
+          &quot;References&quot;: [
+            &quot;https://docs.aws.amazon.com/AmazonS3/latest/userguide/access-control-block-public-access.html&quot;,
+            &quot;https://avd.aquasec.com/misconfig/avd-aws-0086&quot;
+          ],
+          &quot;Status&quot;: &quot;FAIL&quot;,
+          &quot;Layer&quot;: {},
+          &quot;CauseMetadata&quot;: {
+            &quot;Resource&quot;: &quot;aws_s3_bucket_public_access_block.public_data&quot;,
+            &quot;Provider&quot;: &quot;AWS&quot;,
+            &quot;Service&quot;: &quot;s3&quot;,
+            &quot;StartLine&quot;: 6,
+            &quot;EndLine&quot;: 6,
+            &quot;Code&quot;: {
+              &quot;Lines&quot;: [
+                {
+                  &quot;Number&quot;: 4,
+                  &quot;Content&quot;: &quot;resource \&quot;aws_s3_bucket_public_access_block\&quot; \&quot;public_data\&quot; {&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\&quot;aws_s3_bucket_public_access_block\&quot;\u001b[0m \u001b[38;5;37m\&quot;public_data\&quot;\u001b[0m {&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 5,
+                  &quot;Content&quot;: &quot;  bucket = aws_s3_bucket.public_data.id&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mbucket\u001b[0m = aws_s3_bucket.public_data.id&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 6,
+                  &quot;Content&quot;: &quot;  block_public_acls = false&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;false&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mblock_public_acls\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: true,
+                  &quot;LastCause&quot;: true
+                },
+                {
+                  &quot;Number&quot;: 7,
+                  &quot;Content&quot;: &quot;  block_public_policy = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mblock_public_policy\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 8,
+                  &quot;Content&quot;: &quot;  ignore_public_acls = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mignore_public_acls\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 9,
+                  &quot;Content&quot;: &quot;  restrict_public_buckets = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mrestrict_public_buckets\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 10,
+                  &quot;Content&quot;: &quot;}&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m}&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                }
+              ]
+            },
+            &quot;Occurrences&quot;: [
+              {
+                &quot;Resource&quot;: &quot;aws_s3_bucket_public_access_block.public_data&quot;,
+                &quot;Filename&quot;: &quot;01-public-s3/main.tf&quot;,
+                &quot;Location&quot;: {
+                  &quot;StartLine&quot;: 4,
+                  &quot;EndLine&quot;: 10
+                }
+              }
+            ]
+          }
+        },
+        {
+          &quot;Type&quot;: &quot;Terraform Security Check&quot;,
+          &quot;ID&quot;: &quot;AVD-AWS-0087&quot;,
+          &quot;AVDID&quot;: &quot;AVD-AWS-0087&quot;,
+          &quot;Title&quot;: &quot;S3 Access block should block public policy&quot;,
+          &quot;Description&quot;: &quot;\nS3 bucket policy should have block public policy to prevent users from putting a policy that enable public access.\n&quot;,
+          &quot;Message&quot;: &quot;Public access block does not block public policies&quot;,
+          &quot;Query&quot;: &quot;data..&quot;,
+          &quot;Resolution&quot;: &quot;Prevent policies that allow public access being PUT&quot;,
+          &quot;Severity&quot;: &quot;HIGH&quot;,
+          &quot;PrimaryURL&quot;: &quot;https://avd.aquasec.com/misconfig/avd-aws-0087&quot;,
+          &quot;References&quot;: [
+            &quot;https://docs.aws.amazon.com/AmazonS3/latest/dev-retired/access-control-block-public-access.html&quot;,
+            &quot;https://avd.aquasec.com/misconfig/avd-aws-0087&quot;
+          ],
+          &quot;Status&quot;: &quot;FAIL&quot;,
+          &quot;Layer&quot;: {},
+          &quot;CauseMetadata&quot;: {
+            &quot;Resource&quot;: &quot;aws_s3_bucket_public_access_block.public_data&quot;,
+            &quot;Provider&quot;: &quot;AWS&quot;,
+            &quot;Service&quot;: &quot;s3&quot;,
+            &quot;StartLine&quot;: 7,
+            &quot;EndLine&quot;: 7,
+            &quot;Code&quot;: {
+              &quot;Lines&quot;: [
+                {
+                  &quot;Number&quot;: 4,
+                  &quot;Content&quot;: &quot;resource \&quot;aws_s3_bucket_public_access_block\&quot; \&quot;public_data\&quot; {&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\&quot;aws_s3_bucket_public_access_block\&quot;\u001b[0m \u001b[38;5;37m\&quot;public_data\&quot;\u001b[0m {&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 5,
+                  &quot;Content&quot;: &quot;  bucket = aws_s3_bucket.public_data.id&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mbucket\u001b[0m = aws_s3_bucket.public_data.id&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 6,
+                  &quot;Content&quot;: &quot;  block_public_acls = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mblock_public_acls\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 7,
+                  &quot;Content&quot;: &quot;  block_public_policy = false&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;false&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mblock_public_policy\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: true,
+                  &quot;LastCause&quot;: true
+                },
+                {
+                  &quot;Number&quot;: 8,
+                  &quot;Content&quot;: &quot;  ignore_public_acls = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mignore_public_acls\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 9,
+                  &quot;Content&quot;: &quot;  restrict_public_buckets = false&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m  \u001b[38;5;245mrestrict_public_buckets\u001b[0m = \u001b[38;5;166mfalse&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 10,
+                  &quot;Content&quot;: &quot;}&quot;,
+                  &quot;IsCause&quot;: false,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m}&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                }
+              ]
+            },
+            &quot;Occurrences&quot;: [
+              {
+                &quot;Resource&quot;: &quot;aws_s3_bucket_public_access_block.public_data&quot;,
+                &quot;Filename&quot;: &quot;01-public-s3/main.tf&quot;,
+                &quot;Location&quot;: {
+                  &quot;StartLine&quot;: 4,
+                  &quot;EndLine&quot;: 10
+                }
+              }
+            ]
+          }
+        },
+        {
+          &quot;Type&quot;: &quot;Terraform Security Check&quot;,
+          &quot;ID&quot;: &quot;AVD-AWS-0088&quot;,
+          &quot;AVDID&quot;: &quot;AVD-AWS-0088&quot;,
+          &quot;Title&quot;: &quot;Unencrypted S3 bucket.&quot;,
+          &quot;Description&quot;: &quot;S3 Buckets should be encrypted to protect the data that is stored within them if access is compromised.&quot;,
+          &quot;Message&quot;: &quot;Bucket does not have encryption enabled&quot;,
+          &quot;Query&quot;: &quot;data..&quot;,
+          &quot;Resolution&quot;: &quot;Configure bucket encryption&quot;,
+          &quot;Severity&quot;: &quot;HIGH&quot;,
+          &quot;PrimaryURL&quot;: &quot;https://avd.aquasec.com/misconfig/avd-aws-0088&quot;,
+          &quot;References&quot;: [
+            &quot;https://docs.aws.amazon.com/AmazonS3/latest/userguide/bucket-encryption.html&quot;,
+            &quot;https://avd.aquasec.com/misconfig/avd-aws-0088&quot;
+          ],
+          &quot;Status&quot;: &quot;FAIL&quot;,
+          &quot;Layer&quot;: {},
+          &quot;CauseMetadata&quot;: {
+            &quot;Resource&quot;: &quot;aws_s3_bucket.public_data&quot;,
+            &quot;Provider&quot;: &quot;AWS&quot;,
+            &quot;Service&quot;: &quot;s3&quot;,
+            &quot;StartLine&quot;: 1,
+            &quot;EndLine&quot;: 3,
+            &quot;Code&quot;: {
+              &quot;Lines&quot;: [
+                {
+                  &quot;Number&quot;: 1,
+                  &quot;Content&quot;: &quot;resource \&quot;aws_s3_bucket\&quot; \&quot;public_data\&quot; {&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\&quot;aws_s3_bucket\&quot;\u001b[0m \u001b[38;5;37m\&quot;public_data\&quot;\u001b[0m {&quot;,
+                  &quot;FirstCause&quot;: true,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 2,
+                  &quot;Content&quot;: &quot;  bucket = \&quot;research-public-data-example\&quot;&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\&quot;research-public-data-example\&quot;&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 3,
+                  &quot;Content&quot;: &quot;}&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m}&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: true
+                }
+              ]
+            }
+          }
+        },
+        {
+          &quot;Type&quot;: &quot;Terraform Security Check&quot;,
+          &quot;ID&quot;: &quot;s3-bucket-logging&quot;,
+          &quot;AVDID&quot;: &quot;AVD-AWS-0089&quot;,
+          &quot;Title&quot;: &quot;S3 Bucket Logging&quot;,
+          &quot;Description&quot;: &quot;Ensures S3 bucket logging is enabled for S3 buckets&quot;,
+          &quot;Message&quot;: &quot;Bucket has logging disabled&quot;,
+          &quot;Namespace&quot;: &quot;builtin.aws.s3.aws0089&quot;,
+          &quot;Query&quot;: &quot;data.builtin.aws.s3.aws0089.deny&quot;,
+          &quot;Resolution&quot;: &quot;Add a logging block to the resource to enable access logging&quot;,
+          &quot;Severity&quot;: &quot;LOW&quot;,
+          &quot;PrimaryURL&quot;: &quot;https://avd.aquasec.com/misconfig/s3-bucket-logging&quot;,
+          &quot;References&quot;: [
+            &quot;https://docs.aws.amazon.com/AmazonS3/latest/userguide/ServerLogs.html&quot;,
+            &quot;https://avd.aquasec.com/misconfig/s3-bucket-logging&quot;
+          ],
+          &quot;Status&quot;: &quot;FAIL&quot;,
+          &quot;Layer&quot;: {},
+          &quot;CauseMetadata&quot;: {
+            &quot;Resource&quot;: &quot;aws_s3_bucket.public_data&quot;,
+            &quot;Provider&quot;: &quot;AWS&quot;,
+            &quot;Service&quot;: &quot;s3&quot;,
+            &quot;StartLine&quot;: 1,
+            &quot;EndLine&quot;: 3,
+            &quot;Code&quot;: {
+              &quot;Lines&quot;: [
+                {
+                  &quot;Number&quot;: 1,
+                  &quot;Content&quot;: &quot;resource \&quot;aws_s3_bucket\&quot; \&quot;public_data\&quot; {&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\&quot;aws_s3_bucket\&quot;\u001b[0m \u001b[38;5;37m\&quot;public_data\&quot;\u001b[0m {&quot;,
+                  &quot;FirstCause&quot;: true,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 2,
+                  &quot;Content&quot;: &quot;  bucket = \&quot;research-public-data-example\&quot;&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;  \u001b[38;5;245mbucket\u001b[0m = \u001b[38;5;37m\&quot;research-public-data-example\&quot;&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: false
+                },
+                {
+                  &quot;Number&quot;: 3,
+                  &quot;Content&quot;: &quot;}&quot;,
+                  &quot;IsCause&quot;: true,
+                  &quot;Annotation&quot;: &quot;&quot;,
+                  &quot;Truncated&quot;: false,
+                  &quot;Highlighted&quot;: &quot;\u001b[0m}&quot;,
+                  &quot;FirstCause&quot;: false,
+                  &quot;LastCause&quot;: true
+                }
+              ]
+            }
+          }
+        },
+        {
+          &quot;Type&quot;: &quot;Terraform Security Check&quot;,
+          &quot;ID&quot;: &quot;AVD-AWS-0090&quot;,
+          &quot;AVDID&quot;: &quot;AVD-AWS-0090&quot;,
+          &quot;Title&quot;: &quot;S3 Data should be versioned&quot;,
+          &quot;Description&quot;: &quot;\nVersioning in Amazon S3 is a means of keeping multiple variants of an object in the same bucket. \nYou </pre>
+</div>
+
+<div class="card">
+    <h2>Research Purpose</h2>
+
+    <p>
+    This prototype investigates whether combining conventional IaC
+    security scanners with additional cross-resource analysis can
+    identify security relationships that may not be detected through
+    isolated resource-level analysis.
+    </p>
+</div>
+
+</body>
+</html>

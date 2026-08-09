@@ -1,0 +1,5 @@
+CUSTOM CROSS-RESOURCE IAM CHECK
+========================================
+PassRole files: ['04-cross-resource-iam/main.tf']
+RunInstances files: ['04-cross-resource-iam/main.tf']
+RESULT: POTENTIAL CROSS-RESOURCE PRIVILEGE PATH
