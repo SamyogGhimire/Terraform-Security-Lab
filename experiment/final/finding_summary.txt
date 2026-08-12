@@ -1,0 +1,33 @@
+============================================================
+FINDING-LEVEL SUMMARY
+============================================================
+
+KICS
+  Vulnerable cases findings : 38
+  Baseline findings         : 25
+  Total findings            : 63
+
+Trivy
+  Vulnerable cases findings : 27
+  Baseline findings         : 21
+  Total findings            : 48
+
+Checkov
+  Vulnerable cases findings : 40
+  Baseline findings         : 24
+  Total findings            : 64
+
+============================================================
+CASE-LEVEL FINDING COUNTS
+============================================================
+Case          KICS     Trivy   Checkov
+S01             10         8        12
+S02              9         5         4
+S03              5         0         9
+S04             10         5         8
+S05              4         9         7
+B01              4         4         6
+B02              7         4         3
+B03              2         0         0
+B04              8         5         8
+B05              4         8         7

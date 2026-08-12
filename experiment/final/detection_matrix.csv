@@ -1,0 +1,11 @@
+case_id,corpus,target_vulnerability,ground_truth,KICS,Trivy,Checkov
+S01,synthetic,public_s3_access,1,1,0,1
+S02,synthetic,unrestricted_security_group,1,1,1,1
+S03,synthetic,excessive_iam_privileges,1,1,0,1
+S04,synthetic,unsecured_rds,1,1,1,1
+S05,synthetic,unencrypted_s3,1,0,1,0
+B01,baseline,secure_s3,0,0,0,0
+B02,baseline,restricted_security_group,0,0,0,0
+B03,baseline,limited_iam_policy,0,0,0,0
+B04,baseline,secure_rds_password,0,0,0,0
+B05,baseline,encrypted_s3,0,0,0,0

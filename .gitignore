@@ -1,3 +1,56 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Virtual environments
+.venv/
+venv/
+env/
+.localstack-venv/
+
+# Terraform
 .terraform/
 *.tfstate
 *.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+
+# Secrets / environment files
+.env
+.env.*
+!.env.example
+
+# Generated experiment results
+experiment/*.txt
+experiment/*.csv
+experiment/*.log
+
+# Generated scanner reports
+results/
+results/**/*.json
+results/**/*.html
+results/**/*.csv
+
+# Generated reports / visualisations
+*.png
+*.jpg
+*.jpeg
+*.pdf
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.bak
+.DS_Store
+
+# IDE / editor
+.vscode/
+.idea/
+
+# OS
+Thumbs.db

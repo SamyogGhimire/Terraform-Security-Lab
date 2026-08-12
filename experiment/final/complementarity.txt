@@ -1,0 +1,50 @@
+=================================================================
+VULNERABLE CASE DETECTION
+=================================================================
+
+S01 - public_s3_access
+  Detected by : KICS, Checkov
+  Missed by   : Trivy
+
+S02 - unrestricted_security_group
+  Detected by : KICS, Trivy, Checkov
+  Missed by   : None
+
+S03 - excessive_iam_privileges
+  Detected by : KICS, Checkov
+  Missed by   : Trivy
+
+S04 - unsecured_rds
+  Detected by : KICS, Trivy, Checkov
+  Missed by   : None
+
+S05 - unencrypted_s3
+  Detected by : Trivy
+  Missed by   : KICS, Checkov
+
+=================================================================
+PAIRWISE OVERLAP
+=================================================================
+
+KICS vs Trivy
+  Both detected : 2
+  KICS only      : 2
+  Trivy only      : 1
+
+KICS vs Checkov
+  Both detected : 4
+  KICS only      : 0
+  Checkov only      : 0
+
+Trivy vs Checkov
+  Both detected : 2
+  Trivy only      : 1
+  Checkov only      : 2
+
+=================================================================
+COMBINED COVERAGE
+=================================================================
+Vulnerable cases : 5
+Detected         : 5
+Missed           : 0
+Coverage         : 100.00%

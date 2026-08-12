@@ -1,0 +1,26 @@
+
+============================================================
+        MULTI-SCANNER COMBINED RESULTS
+============================================================
+
+TP        : 5
+TN        : 5
+FP        : 0
+FN        : 0
+Precision : 100.00%
+Recall    : 100.00%
+F1-score  : 100.00%
+Accuracy  : 100.00%
+FPR       : 0.00%
+
+Case-level combined detection:
+S01  | Ground truth=1 | Combined=1
+S02  | Ground truth=1 | Combined=1
+S03  | Ground truth=1 | Combined=1
+S04  | Ground truth=1 | Combined=1
+S05  | Ground truth=1 | Combined=1
+B01  | Ground truth=0 | Combined=0
+B02  | Ground truth=0 | Combined=0
+B03  | Ground truth=0 | Combined=0
+B04  | Ground truth=0 | Combined=0
+B05  | Ground truth=0 | Combined=0

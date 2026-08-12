@@ -1,0 +1,11 @@
+case_id,corpus,category,vulnerable,severity
+S01,synthetic,public_storage,1,HIGH
+S02,synthetic,open_network,1,HIGH
+S03,synthetic,excessive_iam,1,CRITICAL
+S04,synthetic,hardcoded_credentials,1,CRITICAL
+S05,synthetic,missing_encryption,1,HIGH
+B01,secure,public_storage,0,NONE
+B02,secure,open_network,0,NONE
+B03,secure,excessive_iam,0,NONE
+B04,secure,hardcoded_credentials,0,NONE
+B05,secure,missing_encryption,0,NONE
