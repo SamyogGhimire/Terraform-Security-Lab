@@ -1,0 +1,18 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-08-12T11:57:11.206106625+05:30",
+  "ArtifactName": "dataset/secure/B09",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  }
+}

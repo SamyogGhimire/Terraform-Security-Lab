@@ -1,0 +1,322 @@
+{
+	"kics_version": "v2.1.20",
+	"files_scanned": 2,
+	"lines_scanned": 26,
+	"files_parsed": 2,
+	"lines_parsed": 26,
+	"lines_ignored": 0,
+	"files_failed_to_scan": 0,
+	"queries_total": 1100,
+	"queries_failed_to_execute": 0,
+	"queries_failed_to_compute_similarity_id": 0,
+	"scan_id": "console",
+	"severity_counters": {
+		"CRITICAL": 0,
+		"HIGH": 2,
+		"INFO": 3,
+		"LOW": 2,
+		"MEDIUM": 3,
+		"TRACE": 0
+	},
+	"total_counter": 10,
+	"total_bom_resources": 0,
+	"start": "2026-08-12T06:18:15.064029992Z",
+	"end": "2026-08-12T06:18:22.834629781Z",
+	"paths": [
+		"/path"
+	],
+	"queries": [
+		{
+			"query_name": "DB Instance Storage Not Encrypted",
+			"query_id": "08bd0760-8752-44e1-9779-7bb369b2b4e4",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#storage_encrypted",
+			"severity": "HIGH",
+			"platform": "Terraform",
+			"cwe": "311",
+			"risk_score": "7.1",
+			"cloud_provider": "AWS",
+			"category": "Encryption",
+			"experimental": false,
+			"description": "AWS DB Instance should have its storage encrypted by setting the parameter to 'true'. The storage_encrypted default value is 'false'.",
+			"description_id": "88ca11bc",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "8c7417dd75d47e53b187e090bee40688df2cecaf2967abd5dac185239319bc4b",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[example]",
+					"search_line": 5,
+					"search_value": "",
+					"expected_value": "'storage_encrypted' should be set to true",
+					"actual_value": "'storage_encrypted' is undefined or null"
+				}
+			]
+		},
+		{
+			"query_name": "Passwords And Secrets - Generic Password",
+			"query_id": "487f4be7-3fd9-4506-a07a-eae252180c08",
+			"query_url": "https://docs.kics.io/latest/secrets/",
+			"severity": "HIGH",
+			"platform": "Common",
+			"cwe": "798",
+			"risk_score": "7.8",
+			"cloud_provider": "COMMON",
+			"category": "Secret Management",
+			"experimental": false,
+			"description": "Query to find passwords and secrets in infrastructure code.",
+			"description_id": "d69d8a89",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "fc79468df52fa88e2e47f69c0191db7cd09552fc4e8d67ab79ebb4702f2ff43b",
+					"line": 11,
+					"issue_type": "RedundantAttribute",
+					"search_key": "",
+					"search_line": 0,
+					"search_value": "",
+					"expected_value": "Hardcoded secret key should not appear in source",
+					"actual_value": "Hardcoded secret key appears in source"
+				}
+			]
+		},
+		{
+			"query_name": "IAM Database Auth Not Enabled",
+			"query_id": "88fd05e0-ac0e-43d2-ba6d-fc0ba60ae1a6",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#iam_database_authentication_enabled",
+			"severity": "MEDIUM",
+			"platform": "Terraform",
+			"cwe": "285",
+			"risk_score": "5.9",
+			"cloud_provider": "AWS",
+			"category": "Encryption",
+			"experimental": false,
+			"description": "IAM Database Auth Enabled should be configured to true when using compatible engine and version",
+			"description_id": "12b1c8aa",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "757fcc55562ec9b9798f4a7107a684982b0af08250cf80cf5ef6b7c074b86ae9",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[example]",
+					"search_line": 5,
+					"search_value": "",
+					"expected_value": "'iam_database_authentication_enabled' should be set to true",
+					"actual_value": "'iam_database_authentication_enabled' is undefined or null",
+					"remediation": "iam_database_authentication_enabled = true",
+					"remediation_type": "addition"
+				}
+			]
+		},
+		{
+			"query_name": "RDS With Backup Disabled",
+			"query_id": "1dc73fb4-5b51-430c-8c5f-25dcf9090b02",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance",
+			"severity": "MEDIUM",
+			"platform": "Terraform",
+			"cwe": "754",
+			"risk_score": "5.4",
+			"cloud_provider": "AWS",
+			"category": "Backup",
+			"experimental": false,
+			"description": "Make sure the AWS RDS configuration has automatic backup configured. If the retention period is equal to 0 there is no backup",
+			"description_id": "73fdfe55",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "27b88e8d875d491b38c024f181304263d9cbf8a237755af8bac67adfbffe711f",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[example]",
+					"search_line": 5,
+					"search_value": "",
+					"expected_value": "'backup_retention_period' should be defined, and bigger than '0'",
+					"actual_value": "'backup_retention_period' is not defined",
+					"remediation": "backup_retention_period = 12",
+					"remediation_type": "addition"
+				}
+			]
+		},
+		{
+			"query_name": "RDS Without Logging",
+			"query_id": "8d7f7b8c-6c7c-40f8-baa6-62006c6c7b56",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/db_instance#enabled_cloudwatch_logs_exports",
+			"severity": "MEDIUM",
+			"platform": "Terraform",
+			"cwe": "778",
+			"risk_score": "5.1",
+			"cloud_provider": "AWS",
+			"category": "Observability",
+			"experimental": false,
+			"description": "RDS does not have any kind of logger",
+			"description_id": "c499a58c",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "aefa1f9d7b28f077284c7561d21eb2b392798257dc30d495433ec8f853b57279",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[example]",
+					"search_line": 5,
+					"search_value": "",
+					"expected_value": "'enabled_cloudwatch_logs_exports' should be defined",
+					"actual_value": "'enabled_cloudwatch_logs_exports' is undefined"
+				}
+			]
+		},
+		{
+			"query_name": "IAM Access Analyzer Not Enabled",
+			"query_id": "e592a0c5-5bdb-414c-9066-5dba7cdea370",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/accessanalyzer_analyzer",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "710",
+			"risk_score": "3.5",
+			"cloud_provider": "AWS",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "IAM Access Analyzer should be enabled and configured to continuously monitor resource permissions",
+			"description_id": "d03e85ae",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "0a7d0464de505a54720d6002d14a22a32e6b20bb8189d444ab621d8ab838304f",
+					"line": 5,
+					"resource_type": "n/a",
+					"resource_name": "n/a",
+					"issue_type": "MissingAttribute",
+					"search_key": "resource",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "'aws_accessanalyzer_analyzer' should be set",
+					"actual_value": "'aws_accessanalyzer_analyzer' is undefined"
+				}
+			]
+		},
+		{
+			"query_name": "Tags Not Copied to RDS Cluster Snapshot",
+			"query_id": "6d3dead4-c6b2-4db7-81bd-3a83eae8f255",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/rds_cluster#copy_tags_to_snapshot",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "284",
+			"risk_score": "1.0",
+			"cloud_provider": "AWS",
+			"category": "Backup",
+			"experimental": false,
+			"description": "Tags of the RDS Cluster should be copied to the respective snapshots to ensure that snapshots retain important metadata for identification, cost allocation, and resource management",
+			"description_id": "6d3dead4",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "f46c2ad85d10d1b94a1d791e65aa26197b8b3ba48d8b0cb7a26a38a6fe3986bc",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[example]",
+					"search_line": 5,
+					"search_value": "",
+					"expected_value": "'aws_db_instance[example].copy_tags_to_snapshot' should be defined to true",
+					"actual_value": "'aws_db_instance[example].copy_tags_to_snapshot' is not defined"
+				}
+			]
+		},
+		{
+			"query_name": "Resource Not Using Tags",
+			"query_id": "e38a8e0a-b88b-4902-b3fe-b0fcb17d5c10",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/resource-tagging",
+			"severity": "INFO",
+			"platform": "Terraform",
+			"cwe": "665",
+			"risk_score": "0.0",
+			"cloud_provider": "AWS",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "AWS services resource tags are an essential part of managing components. As a best practice, the field 'tags' should have additional tags defined other than 'Name'",
+			"description_id": "09db2d52",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "e8525949fc2dbff5effa2d65bbdbc811797cd925ae2d1a6605e079d18517ed17",
+					"line": 5,
+					"resource_type": "aws_db_instance",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_db_instance[{{example}}]",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "aws_db_instance[{{example}}].tags should be defined and not null",
+					"actual_value": "aws_db_instance[{{example}}].tags is undefined or null"
+				}
+			]
+		},
+		{
+			"query_name": "Variable Without Description",
+			"query_id": "2a153952-2544-4687-bcc9-cc8fea814a9b",
+			"query_url": "https://www.terraform.io/docs/language/values/variables.html#input-variable-documentation",
+			"severity": "INFO",
+			"platform": "Terraform",
+			"cwe": "710",
+			"risk_score": "0.0",
+			"cloud_provider": "COMMON",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "All variables should contain a valid description.",
+			"description_id": "b44986be",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "bf5922fa289c11f34523573d885e8102f3f05aeef852c9a0611926826b4695a7",
+					"line": 1,
+					"resource_type": "n/a",
+					"resource_name": "n/a",
+					"issue_type": "MissingAttribute",
+					"search_key": "variable.{{username}}",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "'description' should be defined and not null",
+					"actual_value": "'description' is undefined or null"
+				}
+			]
+		},
+		{
+			"query_name": "Variable Without Type",
+			"query_id": "fc5109bf-01fd-49fb-8bde-4492b543c34a",
+			"query_url": "https://www.terraform.io/docs/language/values/variables.html#input-variable-documentation",
+			"severity": "INFO",
+			"platform": "Terraform",
+			"cwe": "710",
+			"risk_score": "0.0",
+			"cloud_provider": "COMMON",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "All variables should contain a valid type.",
+			"description_id": "bba696eb",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "c60574d78373968dbe3ee2d90e07db03df60f3928fe0c6de2ec9367cca4e1498",
+					"line": 1,
+					"resource_type": "n/a",
+					"resource_name": "n/a",
+					"issue_type": "MissingAttribute",
+					"search_key": "variable.{{username}}",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "'type' should be defined and not null",
+					"actual_value": "'type' is undefined or null"
+				}
+			]
+		}
+	]
+}

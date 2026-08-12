@@ -1,0 +1,11 @@
+case_id,corpus,category,ground_truth
+S01,synthetic,public_s3,1
+S02,synthetic,open_ssh,1
+S03,synthetic,excessive_iam,1
+S04,synthetic,hardcoded_credentials,1
+S05,synthetic,missing_encryption,1
+B01,secure,public_s3,0
+B02,secure,open_ssh,0
+B03,secure,excessive_iam,0
+B04,secure,hardcoded_credentials,0
+B05,secure,missing_encryption,0
