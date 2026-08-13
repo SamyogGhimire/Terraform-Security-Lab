@@ -1,7 +1,5 @@
 #!/bin/bash
 
-set -e
-
 mkdir -p results/kics
 
 echo ""
@@ -12,65 +10,91 @@ echo ""
 
 TOTAL=0
 CASES_WITH_FINDINGS=0
+CASES_WITHOUT_FINDINGS=0
+FAILED_SCANS=0
 TOTAL_FINDINGS=0
 
 for dir in dataset/synthetic/* dataset/secure/*; do
+
+    # Skip anything that is not a directory
+    [ -d "$dir" ] || continue
 
     case_id=$(basename "$dir")
     TOTAL=$((TOTAL + 1))
 
     echo "------------------------------------------------------------"
-    echo "CASE: $case_id"
+    echo "CASE:   $case_id"
     echo "TARGET: $dir"
     echo "------------------------------------------------------------"
 
     mkdir -p "results/kics/$case_id"
 
-    docker run --rm \
-        -v "$(pwd)/$dir:/path" \
+    JSON="results/kics/$case_id/$case_id.json"
+
+    # Remove old result so we know this scan generated the file
+    rm -f "$JSON"
+
+    echo "Running KICS..."
+
+    if docker run --rm \
+        -v "$(pwd)/$dir:/path:ro" \
         -v "$(pwd)/results/kics/$case_id:/results" \
         checkmarx/kics:latest \
         scan \
         -p /path \
         --report-formats json \
         --output-path /results \
-        --output-name "$case_id" \
-        >/dev/null 2>&1
+        --output-name "$case_id"
+    then
 
-    JSON="results/kics/$case_id/$case_id.json"
+        if [ -f "$JSON" ]; then
 
-    if [ -f "$JSON" ]; then
-
-        COUNT=$(python3 - "$JSON" <<'PY'
+            COUNT=$(python3 - "$JSON" <<'PY'
 import json
 import sys
 
-with open(sys.argv[1]) as f:
+path = sys.argv[1]
+
+with open(path) as f:
     data = json.load(f)
 
-count = 0
-
-for query in data.get("queries", []):
-    count += query.get("total_counter", 0)
-
-print(count)
+print(data.get("total_counter", 0))
 PY
 )
 
-        if [ "$COUNT" -gt 0 ]; then
-            echo "RESULT : Findings detected"
-            echo "COUNT  : $COUNT"
-            CASES_WITH_FINDINGS=$((CASES_WITH_FINDINGS + 1))
-            TOTAL_FINDINGS=$((TOTAL_FINDINGS + COUNT))
+            if [ "$COUNT" -gt 0 ]; then
+                echo ""
+                echo "RESULT : FINDINGS DETECTED"
+                echo "COUNT  : $COUNT"
+
+                CASES_WITH_FINDINGS=$((CASES_WITH_FINDINGS + 1))
+                TOTAL_FINDINGS=$((TOTAL_FINDINGS + COUNT))
+
+            else
+                echo ""
+                echo "RESULT : NO FINDINGS"
+                echo "COUNT  : 0"
+
+                CASES_WITHOUT_FINDINGS=$((CASES_WITHOUT_FINDINGS + 1))
+            fi
+
+            echo "SAVED  : $JSON"
+
         else
-            echo "RESULT : No findings detected"
-            echo "COUNT  : 0"
+
+            echo ""
+            echo "ERROR  : KICS completed but JSON was not generated"
+            echo "EXPECTED: $JSON"
+
+            FAILED_SCANS=$((FAILED_SCANS + 1))
         fi
 
-        echo "SAVED  : $JSON"
-
     else
-        echo "ERROR  : JSON result was not generated"
+
+        echo ""
+        echo "ERROR  : KICS scan FAILED for $case_id"
+
+        FAILED_SCANS=$((FAILED_SCANS + 1))
     fi
 
     echo ""
@@ -80,9 +104,10 @@ done
 echo "============================================================"
 echo "                    KICS SUMMARY"
 echo "============================================================"
-echo "Cases scanned        : $TOTAL"
-echo "Cases with findings  : $CASES_WITH_FINDINGS"
-echo "Cases with no findings: $((TOTAL - CASES_WITH_FINDINGS))"
-echo "Total findings       : $TOTAL_FINDINGS"
+echo "Cases attempted       : $TOTAL"
+echo "Cases with findings   : $CASES_WITH_FINDINGS"
+echo "Cases with no findings: $CASES_WITHOUT_FINDINGS"
+echo "Failed scans          : $FAILED_SCANS"
+echo "Total findings        : $TOTAL_FINDINGS"
 echo "============================================================"
 echo ""
