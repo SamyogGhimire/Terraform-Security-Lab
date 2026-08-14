@@ -1,27 +1,335 @@
 {
 	"kics_version": "v2.1.20",
-	"files_scanned": 0,
-	"lines_scanned": 0,
-	"files_parsed": 0,
-	"lines_parsed": 0,
+	"files_scanned": 1,
+	"lines_scanned": 55,
+	"files_parsed": 1,
+	"lines_parsed": 55,
 	"lines_ignored": 0,
 	"files_failed_to_scan": 0,
-	"queries_total": 0,
+	"queries_total": 1100,
 	"queries_failed_to_execute": 0,
 	"queries_failed_to_compute_similarity_id": 0,
 	"scan_id": "console",
 	"severity_counters": {
 		"CRITICAL": 0,
-		"HIGH": 0,
-		"INFO": 0,
-		"LOW": 0,
-		"MEDIUM": 0,
+		"HIGH": 2,
+		"INFO": 2,
+		"LOW": 5,
+		"MEDIUM": 2,
 		"TRACE": 0
 	},
-	"total_counter": 0,
+	"total_counter": 11,
 	"total_bom_resources": 0,
-	"start": "2026-08-12T06:18:33.751270532Z",
-	"end": "2026-08-12T06:18:33.751879041Z",
-	"paths": [],
-	"queries": []
+	"start": "2026-08-13T10:52:45.648163106Z",
+	"end": "2026-08-13T10:52:52.31420252Z",
+	"paths": [
+		"/path"
+	],
+	"queries": [
+		{
+			"query_name": "IAM Policy Grants Full Permissions",
+			"query_id": "575a2155-6af1-4026-b1af-d5bc8fe2a904",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy",
+			"severity": "HIGH",
+			"platform": "Terraform",
+			"cwe": "732",
+			"risk_score": "8.0",
+			"cloud_provider": "AWS",
+			"category": "Access Control",
+			"experimental": false,
+			"description": "IAM policy should not grant full permissions to resources from the get-go, instead of granting permissions gradually as necessary.",
+			"description_id": "f20cf2cf",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "09c7364b946a8d9108b3cf8b213077173e8a1686376839f6e5b9c0c5d05e3bb4",
+					"line": 23,
+					"resource_type": "aws_iam_role_policy",
+					"resource_name": "terraform-security-demo-lambda-policy",
+					"issue_type": "IncorrectValue",
+					"search_key": "aws_iam_role_policy[lambda_policy].policy",
+					"search_line": 23,
+					"search_value": "",
+					"expected_value": "'policy.Statement.Resource' and 'policy.Statement.Action' should not equal '*'",
+					"actual_value": "'policy.Statement.Resource' and 'policy.Statement.Action' are equal to '*'"
+				}
+			]
+		},
+		{
+			"query_name": "Lambda Function With Privileged Role",
+			"query_id": "1b3af2f9-af8c-4dfc-a0f1-a03adb70deb2",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function",
+			"severity": "HIGH",
+			"platform": "Terraform",
+			"cwe": "284",
+			"risk_score": "7.7",
+			"cloud_provider": "AWS",
+			"category": "Insecure Configurations",
+			"experimental": false,
+			"description": "It is not advisable for AWS Lambda Functions to have privileged permissions.",
+			"description_id": "1b3af2f9",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "6430bd54ee6ca6ec765056ab6665afb50b5c614f83302df42b8341512cbb96fe",
+					"line": 37,
+					"resource_type": "aws_lambda_function",
+					"resource_name": "example",
+					"issue_type": "IncorrectValue",
+					"search_key": "aws_lambda_function[example].role",
+					"search_line": 37,
+					"search_value": "lambda_role/lambda_policy/0",
+					"expected_value": "aws_lambda_function[example].role shouldn't have privileged permissions through attached inline policy.",
+					"actual_value": "aws_lambda_function[example].role has been provided privileged permissions through attached inline policy. Provided privileged permissions: 'iam:CreatePolicyVersion' , 'iam:SetDefaultPolicyVersion' , 'iam:CreateAccessKey' , 'iam:CreateLoginProfile' , 'iam:UpdateLoginProfile' , 'iam:AttachUserPolicy' , 'iam:AttachGroupPolicy' , 'iam:AttachRolePolicy' , 'iam:PutUserPolicy' , 'iam:PutGroupPolicy' , 'iam:PutRolePolicy' , 'iam:AddUserToGroup' , 'iam:UpdateAssumeRolePolicy' , 'iam:PassRole' , 'iam:CreateServiceLinkedRole' , 'sts:AssumeRole' , 'iam:*' , 'sts:*'. List of privileged permissions '[\"iam:CreatePolicyVersion\", \"iam:SetDefaultPolicyVersion\", \"iam:CreateAccessKey\", \"iam:CreateLoginProfile\", \"iam:UpdateLoginProfile\", \"iam:AttachUserPolicy\", \"iam:AttachGroupPolicy\", \"iam:AttachRolePolicy\", \"iam:PutUserPolicy\", \"iam:PutGroupPolicy\", \"iam:PutRolePolicy\", \"iam:AddUserToGroup\", \"iam:UpdateAssumeRolePolicy\", \"iam:PassRole\", \"iam:CreateServiceLinkedRole\", \"sts:AssumeRole\", \"iam:*\", \"sts:*\"]'"
+				}
+			]
+		},
+		{
+			"query_name": "IAM Policies With Full Privileges",
+			"query_id": "2f37c4a3-58b9-4afe-8a87-d7f1d2286f84",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/iam_role_policy",
+			"severity": "MEDIUM",
+			"platform": "Terraform",
+			"cwe": "284",
+			"risk_score": "6.8",
+			"cloud_provider": "AWS",
+			"category": "Access Control",
+			"experimental": false,
+			"description": "IAM policies shouldn't allow full administrative privileges (for all resources)",
+			"description_id": "7f603399",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "9e8612626c16ca84abc56041dd7a728b7cc89225a7ee61d2a0a7563c1b1a0dc6",
+					"line": 23,
+					"resource_type": "aws_iam_role_policy",
+					"resource_name": "terraform-security-demo-lambda-policy",
+					"issue_type": "IncorrectValue",
+					"search_key": "aws_iam_role_policy[lambda_policy].policy",
+					"search_line": 23,
+					"search_value": "",
+					"expected_value": "'policy.Statement.Action' shouldn't contain '*' or 'iam:*'",
+					"actual_value": "'policy.Statement.Action' contains '*' or 'iam:*'"
+				}
+			]
+		},
+		{
+			"query_name": "IAM policy allows for data exfiltration",
+			"query_id": "ba2ed23b-52d3-45ca-be25-f6c358d45abd",
+			"query_url": "https://cloudsplaining.readthedocs.io/en/latest/glossary/data-exfiltration/",
+			"severity": "MEDIUM",
+			"platform": "Terraform",
+			"cwe": "200",
+			"risk_score": "3.0",
+			"cloud_provider": "AWS",
+			"category": "Resource Management",
+			"experimental": false,
+			"description": "This policy contains actions that can retrieve information unrestricted and could lead to data exfiltration",
+			"description_id": "ba2ed23b",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "651fe056de03e9101a7584dc441b5d01b9ef1a800e1215446a290b39638099e2",
+					"line": 23,
+					"resource_type": "aws_iam_role_policy",
+					"resource_name": "terraform-security-demo-lambda-policy",
+					"issue_type": "IncorrectValue",
+					"search_key": "aws_iam_role_policy[lambda_policy].policy",
+					"search_line": 23,
+					"search_value": "*",
+					"expected_value": "'lambda_policy.policy.Statement.Action[0]' shouldn't contain illegal actions",
+					"actual_value": "'lambda_policy.policy.Statement.Action[0]' contains [*]"
+				}
+			]
+		},
+		{
+			"query_name": "IAM Access Analyzer Not Enabled",
+			"query_id": "e592a0c5-5bdb-414c-9066-5dba7cdea370",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/accessanalyzer_analyzer",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "710",
+			"risk_score": "3.5",
+			"cloud_provider": "AWS",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "IAM Access Analyzer should be enabled and configured to continuously monitor resource permissions",
+			"description_id": "d03e85ae",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "0a7d0464de505a54720d6002d14a22a32e6b20bb8189d444ab621d8ab838304f",
+					"line": 1,
+					"resource_type": "n/a",
+					"resource_name": "n/a",
+					"issue_type": "MissingAttribute",
+					"search_key": "resource",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "'aws_accessanalyzer_analyzer' should be set",
+					"actual_value": "'aws_accessanalyzer_analyzer' is undefined"
+				}
+			]
+		},
+		{
+			"query_name": "Lambda Function Without Dead Letter Queue",
+			"query_id": "720f44cf-285e-4b69-8f72-835e6bc1dceb",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#dead_letter_config",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "390",
+			"risk_score": "1.0",
+			"cloud_provider": "AWS",
+			"category": "Insecure Configurations",
+			"experimental": false,
+			"description": "AWS Lambda Function should be configured for a Dead Letter Queue(DLQ)",
+			"description_id": "720f44cf",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "acd3e392103f163f7d91230029cf27064373c62f2981eff48a74d5064758d617",
+					"line": 34,
+					"resource_type": "aws_lambda_function",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_lambda_function[example]",
+					"search_line": 34,
+					"search_value": "",
+					"expected_value": "'aws_lambda_function[example].dead_letter_config' should be defined and not null",
+					"actual_value": "'aws_lambda_function[example].dead_letter_config' is undefined or null"
+				}
+			]
+		},
+		{
+			"query_name": "Lambda Functions Without X-Ray Tracing",
+			"query_id": "8152e0cf-d2f0-47ad-96d5-d003a76eabd1",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_function#tracing_config",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "778",
+			"risk_score": "3.3",
+			"cloud_provider": "AWS",
+			"category": "Observability",
+			"experimental": false,
+			"description": "AWS Lambda functions should have TracingConfig enabled. For this, property 'tracing_Config.mode' should have the value 'Active'",
+			"description_id": "2f90e1e9",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "0e1cc48528aa146640260e31a70dc920fb89bb35ac869ba4a0a7072abd21e23c",
+					"line": 34,
+					"resource_type": "aws_lambda_function",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_lambda_function[example]",
+					"search_line": 34,
+					"search_value": "",
+					"expected_value": "aws_lambda_function[example].tracing_config should be defined and not null",
+					"actual_value": "aws_lambda_function[example].tracing_config is undefined or null",
+					"remediation": "tracing_config {\n\t\tmode = Active\n\t}",
+					"remediation_type": "addition"
+				}
+			]
+		},
+		{
+			"query_name": "Lambda IAM InvokeFunction Misconfigured",
+			"query_id": "0ca1017d-3b80-423e-bb9c-6cd5898d34bd",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/lambda_permission",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "710",
+			"risk_score": "2.3",
+			"cloud_provider": "AWS",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "Lambda permission may be misconfigured if the action field is not filled in by 'lambda:InvokeFunction'",
+			"description_id": "0ca1017d",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "671a928583d8dedeaa7d37f4ffaf0ad1fd6949229e07d4dd4be28aac302967f3",
+					"line": 23,
+					"resource_type": "aws_iam_role_policy",
+					"resource_name": "terraform-security-demo-lambda-policy",
+					"issue_type": "IncorrectValue",
+					"search_key": "aws_iam_role_policy[lambda_policy].policy",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "[lambda_policy].policy should be misconfigured",
+					"actual_value": "[lambda_policy].policy allows access to function (unqualified ARN) and its sub-resources, add another statement with \":*\" to function name"
+				}
+			]
+		},
+		{
+			"query_name": "S3 bucket notifications disabled",
+			"query_id": "e39f87f5-0abf-488b-864c-63ee1f588140",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/s3_bucket_notification",
+			"severity": "LOW",
+			"platform": "Terraform",
+			"cwe": "778",
+			"risk_score": "1.0",
+			"cloud_provider": "AWS",
+			"category": "Observability",
+			"experimental": false,
+			"description": "S3 bucket notifications provide alerts triggered when certain operations are performed, which might be a helpful indicator for detecting unintended operations that might compromise your infrastructure or even malicious activity.",
+			"description_id": "e39f87f5",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "7f3a3647ec920d831e229aa9410ae3e5249d1b849afc03478ddca4a255e62dd5",
+					"line": 34,
+					"resource_type": "aws_lambda_function",
+					"resource_name": "aws_lambda_function",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_lambda_function[example]",
+					"search_line": 34,
+					"search_value": "",
+					"expected_value": "'aws_s3_bucket_notification' should be defined and not null",
+					"actual_value": "'aws_s3_bucket_notification' is undefined or null"
+				}
+			]
+		},
+		{
+			"query_name": "Resource Not Using Tags",
+			"query_id": "e38a8e0a-b88b-4902-b3fe-b0fcb17d5c10",
+			"query_url": "https://registry.terraform.io/providers/hashicorp/aws/latest/docs/guides/resource-tagging",
+			"severity": "INFO",
+			"platform": "Terraform",
+			"cwe": "665",
+			"risk_score": "0.0",
+			"cloud_provider": "AWS",
+			"category": "Best Practices",
+			"experimental": false,
+			"description": "AWS services resource tags are an essential part of managing components. As a best practice, the field 'tags' should have additional tags defined other than 'Name'",
+			"description_id": "09db2d52",
+			"files": [
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "5f879b572d66d8019d437119c178c0587d58a09ec3d20eda810c7bfdd1d5a3b9",
+					"line": 34,
+					"resource_type": "aws_lambda_function",
+					"resource_name": "example",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_lambda_function[{{example}}]",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "aws_lambda_function[{{example}}].tags should be defined and not null",
+					"actual_value": "aws_lambda_function[{{example}}].tags is undefined or null"
+				},
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "8a67698fb32e28267056886e7d6aa42022bb5832b5e8a52365e7f3898b4375ed",
+					"line": 1,
+					"resource_type": "aws_iam_role",
+					"resource_name": "terraform-security-demo-lambda-role",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_iam_role[{{lambda_role}}]",
+					"search_line": -1,
+					"search_value": "",
+					"expected_value": "aws_iam_role[{{lambda_role}}].tags should be defined and not null",
+					"actual_value": "aws_iam_role[{{lambda_role}}].tags is undefined or null"
+				}
+			]
+		}
+	]
 }

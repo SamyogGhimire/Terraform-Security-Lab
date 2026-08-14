@@ -20,8 +20,8 @@
 	},
 	"total_counter": 7,
 	"total_bom_resources": 0,
-	"start": "2026-08-12T06:18:42.633773189Z",
-	"end": "2026-08-12T06:18:50.962809604Z",
+	"start": "2026-08-13T10:53:07.37016325Z",
+	"end": "2026-08-13T10:53:14.074944483Z",
 	"paths": [
 		"/path"
 	],
@@ -158,19 +158,6 @@
 			"files": [
 				{
 					"file_name": "../../path/main.tf",
-					"similarity_id": "f94c42710c541fd8cbf469c4265ebbadfe830f9fdcacd329fa058bcf9feec35e",
-					"line": 4,
-					"resource_type": "aws_security_group",
-					"resource_name": "restricted_ssh",
-					"issue_type": "MissingAttribute",
-					"search_key": "aws_security_group[restricted_ssh].ingress",
-					"search_line": 4,
-					"search_value": "",
-					"expected_value": "aws_security_group[restricted_ssh].ingress.description should be defined and not null",
-					"actual_value": "aws_security_group[restricted_ssh].ingress.description is undefined or null"
-				},
-				{
-					"file_name": "../../path/main.tf",
 					"similarity_id": "e32dea5480d8e87f0f8572b3850f7a7b86127e0125c32275605ac60767f9351b",
 					"line": 11,
 					"resource_type": "aws_security_group",
@@ -181,6 +168,19 @@
 					"search_value": "",
 					"expected_value": "aws_security_group[restricted_ssh].egress.description should be defined and not null",
 					"actual_value": "aws_security_group[restricted_ssh].egress.description is undefined or null"
+				},
+				{
+					"file_name": "../../path/main.tf",
+					"similarity_id": "f94c42710c541fd8cbf469c4265ebbadfe830f9fdcacd329fa058bcf9feec35e",
+					"line": 4,
+					"resource_type": "aws_security_group",
+					"resource_name": "restricted_ssh",
+					"issue_type": "MissingAttribute",
+					"search_key": "aws_security_group[restricted_ssh].ingress",
+					"search_line": 4,
+					"search_value": "",
+					"expected_value": "aws_security_group[restricted_ssh].ingress.description should be defined and not null",
+					"actual_value": "aws_security_group[restricted_ssh].ingress.description is undefined or null"
 				}
 			]
 		},

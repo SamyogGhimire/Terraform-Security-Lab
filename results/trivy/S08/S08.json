@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2026-08-12T11:57:05.185717896+05:30",
+  "CreatedAt": "2026-08-13T16:20:44.973972366+05:30",
   "ArtifactName": "dataset/synthetic/S08",
   "ArtifactType": "filesystem",
   "Metadata": {
@@ -14,5 +14,235 @@
       },
       "config": {}
     }
-  }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 2,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AWS-0057",
+          "AVDID": "AVD-AWS-0057",
+          "Title": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+          "Description": "You should use the principle of least privilege when defining your IAM policies. This means you should specify each exact permission required without using wildcards, as this could cause the granting of access to certain undesired actions, resources and principals.",
+          "Message": "IAM policy document uses sensitive action 'ec2:RunInstances' on wildcarded resource '*'",
+          "Query": "data..",
+          "Resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-aws-0057",
+          "References": [
+            "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+            "https://avd.aquasec.com/misconfig/avd-aws-0057"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "aws_iam_role_policy.dangerous_policy",
+            "Provider": "AWS",
+            "Service": "iam",
+            "StartLine": 24,
+            "EndLine": 24,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 19,
+                  "Content": "resource \"aws_iam_role_policy\" \"dangerous_policy\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_iam_role_policy\"\u001b[0m \u001b[38;5;37m\"dangerous_policy\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 20,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "    Version = \"2012-10-17\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mVersion\u001b[0m = \u001b[38;5;37m\"2012-10-17\"",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 46,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 47,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 24,
+                  "EndLine": 24
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 23,
+                  "EndLine": 46
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 19,
+                  "EndLine": 47
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AWS-0057",
+          "AVDID": "AVD-AWS-0057",
+          "Title": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+          "Description": "You should use the principle of least privilege when defining your IAM policies. This means you should specify each exact permission required without using wildcards, as this could cause the granting of access to certain undesired actions, resources and principals.",
+          "Message": "IAM policy document uses sensitive action 'iam:PassRole' on wildcarded resource '*'",
+          "Query": "data..",
+          "Resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-aws-0057",
+          "References": [
+            "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+            "https://avd.aquasec.com/misconfig/avd-aws-0057"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "aws_iam_role_policy.dangerous_policy",
+            "Provider": "AWS",
+            "Service": "iam",
+            "StartLine": 24,
+            "EndLine": 24,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 19,
+                  "Content": "resource \"aws_iam_role_policy\" \"dangerous_policy\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_iam_role_policy\"\u001b[0m \u001b[38;5;37m\"dangerous_policy\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 20,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "    Version = \"2012-10-17\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mVersion\u001b[0m = \u001b[38;5;37m\"2012-10-17\"",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 46,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 47,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 24,
+                  "EndLine": 24
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 23,
+                  "EndLine": 46
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.dangerous_policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 19,
+                  "EndLine": 47
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
 }

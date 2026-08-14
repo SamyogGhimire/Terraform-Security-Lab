@@ -14,7 +14,7 @@ CASES_WITHOUT_FINDINGS=0
 FAILED_SCANS=0
 TOTAL_FINDINGS=0
 
-for dir in dataset/synthetic/* dataset/secure/*; do
+for dir in dataset/synthetic/* dataset/secure/* dataset/public/*; do
 
     # Skip anything that is not a directory
     [ -d "$dir" ] || continue

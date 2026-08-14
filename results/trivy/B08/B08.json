@@ -1,6 +1,6 @@
 {
   "SchemaVersion": 2,
-  "CreatedAt": "2026-08-12T11:57:10.785906432+05:30",
+  "CreatedAt": "2026-08-13T16:20:51.726003825+05:30",
   "ArtifactName": "dataset/secure/B08",
   "ArtifactType": "filesystem",
   "Metadata": {
@@ -14,5 +14,27 @@
       },
       "config": {}
     }
-  }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    }
+  ]
 }
