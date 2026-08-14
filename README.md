@@ -1,1164 +1,535 @@
-# Terraform Security Validation Lab
+# Terraform Security Lab
 
-A small, reproducible technical prototype for the **Terraform Infrastructure-as-Code (IaC) security validation research project**.
+A reproducible experimental framework for evaluating **KICS, Trivy, and Checkov** for Terraform Infrastructure-as-Code (IaC) security misconfiguration detection.
 
-The project investigates whether using multiple security scanners together can improve detection of intentionally introduced Terraform security misconfigurations.
+## Research Objective
 
-The prototype uses three IaC security scanners:
+The project investigates whether combining multiple IaC security scanners provides broader detection coverage than relying on a single scanner.
 
-- **KICS**
-- **Trivy**
-- **Checkov**
+The evaluation uses:
 
-It also contains a small **custom cross-resource IAM correlation check** for security conditions that may depend on relationships between resources rather than a single resource configuration.
-
----
-
-## 1. Project Goal
-
-The main idea is simple:
-
-> Create a small set of known Terraform security cases, scan them with multiple tools, compare their results against known ground truth, and measure how well each scanner and the combined approach performs.
-
-The experiment deliberately avoids requiring a real AWS deployment.
-
-This makes the prototype:
-
-- easy to reproduce;
-- inexpensive;
-- safe to run;
-- suitable for a university research demonstration;
-- easier to understand than a large cloud deployment.
+- **10 synthetic vulnerable Terraform cases (S01-S10)**
+- **10 secure baseline cases (B01-B10)**
+- **5 public Terraform projects (P01-P05)**
+- Ground-truth validation
+- Precision, recall, F1-score and false-positive-rate analysis
+- Scanner complementarity analysis
+- Custom cross-resource IAM analysis
 
 ---
 
-## 2. Basic Workflow
+## Repository Structure
 
 ```text
-Terraform test cases
-        |
-        v
-+-----------------------+
-| Ground-truth cases    |
-| S01-S05 / B01-B05     |
-+-----------------------+
-        |
-        v
-+-------------------------------+
-| Security validation scanners  |
-| KICS | Trivy | Checkov        |
-+-------------------------------+
-        |
-        v
-Raw JSON / scanner results
-        |
-        v
-Result normalisation
-        |
-        v
-Detection matrix
-        |
-        v
-+------------------------------------+
-| Metrics                            |
-| TP / TN / FP / FN                  |
-| Precision / Recall / F1 / Accuracy |
-| FPR                                |
-+------------------------------------+
-        |
-        v
-Complementarity analysis
-        |
-        v
-Combined multi-scanner result
-```
-
----
-
-## 3. Repository Structure
-
-A simplified structure is:
-
-```text
-terraform-security-lab/
-│
+.
 ├── dataset/
-│   ├── synthetic/
-│   │   ├── S01/
-│   │   ├── S02/
-│   │   ├── S03/
-│   │   ├── S04/
-│   │   └── S05/
-│   │
-│   └── secure/
-│       ├── B01/
-│       ├── B02/
-│       ├── B03/
-│       ├── B04/
-│       └── B05/
-│
-├── results/
-│   ├── kics/
-│   ├── trivy/
-│   └── checkov/
+│   ├── synthetic/          # Controlled vulnerable Terraform cases
+│   ├── secure/             # Secure baseline cases
+│   └── public/             # External Terraform projects
 │
 ├── experiment/
-│   ├── detection_matrix.csv
-│   ├── tool_metrics.py
-│   ├── combined_metrics.py
-│   ├── complementarity.py
-│   └── ...
+│   ├── generated/          # CSV/TXT experiment outputs
+│   ├── graphs/             # Final experiment graphs
+│   ├── public_dataset/     # Public corpus analysis
+│   ├── results/            # Calculated metrics
+│   └── scripts/            # Analysis and plotting scripts
+│
+├── results/
+│   ├── kics/               # KICS raw JSON results
+│   ├── trivy/              # Trivy raw JSON results
+│   ├── checkov/            # Checkov raw JSON results
+│   ├── public/              # Public-corpus scanner results
+│   └── custom-iam.txt      # Cross-resource IAM analysis
 │
 ├── scripts/
-│   └── run_kics.sh
+│   ├── run_kics.sh
+│   ├── run_trivy.sh
+│   └── run_checkov.sh
 │
-└── run.sh
+└── README.md
 ```
-
-The exact repository may contain additional helper files.
 
 ---
 
-# 4. The Terraform Test Cases
+# 1. Experimental Dataset
 
-The experiment uses two groups.
+## Synthetic Corpus
 
-## Vulnerable cases
+The synthetic corpus contains ten deliberately vulnerable Terraform configurations.
 
-The synthetic cases are:
-
-| Case | Vulnerability |
+| Case | Target vulnerability |
 |---|---|
 | S01 | Public S3 access |
-| S02 | Unrestricted security group |
+| S02 | Unrestricted SSH security group |
 | S03 | Excessive IAM privileges |
 | S04 | Unsecured RDS |
 | S05 | Unencrypted S3 |
+| S06 | Public S3 write access |
+| S07 | Unrestricted RDP security group |
+| S08 | Dangerous IAM PassRole |
+| S09 | Excessive Lambda IAM privileges |
+| S10 | Public/unprotected RDS |
 
-These cases intentionally contain a known security problem.
+Each case has an explicit ground-truth label.
 
-Therefore:
+## Secure Baseline Corpus
+
+B01-B10 represent configurations intended to be secure. They are used to evaluate false-positive behaviour.
+
+## Public Corpus
+
+Five external Terraform projects are included:
 
 ```text
-ground_truth = 1
+P01
+P02
+P03
+P04
+P05
 ```
+
+The projects originate from the `galcan/terraform_sec` dataset. Original dataset metadata is retained in each project's `source.txt`.
+
+The public corpus is treated as an **external validation corpus**, rather than being mixed directly into the controlled ground-truth benchmark.
 
 ---
 
-## Secure baseline cases
+# 2. Security Scanners
 
-The baseline cases are:
-
-| Case | Intended configuration |
+| Tool | Purpose |
 |---|---|
-| B01 | Secure S3 |
-| B02 | Restricted security group |
-| B03 | Limited IAM policy |
-| B04 | Secure RDS password handling |
-| B05 | Encrypted S3 |
+| KICS | IaC security and compliance scanning |
+| Trivy | Terraform/IaC misconfiguration scanning |
+| Checkov | IaC policy and security scanning |
+| Combined framework | Union of detections/findings across scanners |
 
-These cases are intended to represent configurations where the target vulnerability is absent.
-
-Therefore:
-
-```text
-ground_truth = 0
-```
-
-The baseline cases are important because they allow us to measure false positives rather than only measuring whether scanners find vulnerabilities.
+KICS is executed through Docker in the supplied script.
 
 ---
 
-# 5. S01 – Public S3 Access
+# 3. Running the Scanners
 
-File:
-
-```text
-dataset/synthetic/S01/main.tf
-```
-
-The case creates an S3 bucket and deliberately disables public-access protections.
-
-Important configuration:
-
-```hcl
-block_public_acls       = false
-block_public_policy     = false
-ignore_public_acls      = false
-restrict_public_buckets = false
-```
-
-It also creates a bucket policy with:
-
-```hcl
-Effect    = "Allow"
-Principal = "*"
-Action    = "s3:GetObject"
-```
-
-### What does this mean?
-
-`Principal = "*"` means any principal can potentially access the resource, while the policy allows object retrieval.
-
-This creates a public-access security problem.
-
-### Ground truth
-
-```text
-S01 = vulnerable
-ground_truth = 1
-```
-
-### Observed detection
-
-| Tool | Detected? |
-|---|---:|
-| KICS | Yes |
-| Trivy | No |
-| Checkov | Yes |
-
-This is one example of **scanner complementarity**: KICS and Checkov detected the target case while Trivy did not.
-
----
-
-# 6. S02 – Unrestricted Security Group
-
-File:
-
-```text
-dataset/synthetic/S02/main.tf
-```
-
-The security group allows SSH from:
-
-```hcl
-cidr_blocks = ["0.0.0.0/0"]
-```
-
-Port:
-
-```hcl
-from_port = 22
-to_port   = 22
-```
-
-This means SSH is exposed to the entire IPv4 internet.
-
-The egress rule also permits unrestricted outbound traffic.
-
-### Ground truth
-
-```text
-S02 = vulnerable
-ground_truth = 1
-```
-
-### Detection
-
-All three scanners detected the target vulnerability:
-
-| Tool | Detected? |
-|---|---:|
-| KICS | Yes |
-| Trivy | Yes |
-| Checkov | Yes |
-
----
-
-# 7. S03 – Excessive IAM Privileges
-
-File:
-
-```text
-dataset/synthetic/S03/main.tf
-```
-
-The IAM policy contains:
-
-```hcl
-Effect   = "Allow"
-Action   = "*"
-Resource = "*"
-```
-
-This is intentionally excessive.
-
-It gives the policy broad permissions over all actions and resources.
-
-### Ground truth
-
-```text
-S03 = vulnerable
-ground_truth = 1
-```
-
-### Detection
-
-| Tool | Detected? |
-|---|---:|
-| KICS | Yes |
-| Trivy | No |
-| Checkov | Yes |
-
-Again, the result demonstrates why multiple scanners can be useful.
-
----
-
-# 8. S04 – Unsecured RDS
-
-File:
-
-```text
-dataset/synthetic/S04/main.tf
-```
-
-The RDS instance contains a hard-coded password:
-
-```hcl
-password = "SuperSecretPassword123!"
-```
-
-It also lacks several security controls such as encryption and stronger database protection settings.
-
-### Ground truth
-
-```text
-S04 = vulnerable
-ground_truth = 1
-```
-
-### Detection
-
-All three scanners detected the target case:
-
-| Tool | Detected? |
-|---|---:|
-| KICS | Yes |
-| Trivy | Yes |
-| Checkov | Yes |
-
----
-
-# 9. S05 – Unencrypted S3
-
-File:
-
-```text
-dataset/synthetic/S05/main.tf
-```
-
-The bucket is created without a server-side encryption configuration.
-
-### Ground truth
-
-```text
-S05 = vulnerable
-ground_truth = 1
-```
-
-### Detection
-
-| Tool | Detected? |
-|---|---:|
-| KICS | No |
-| Trivy | Yes |
-| Checkov | No |
-
-This is an important result because **Trivy detected the target vulnerability that KICS and Checkov missed**.
-
-This provides direct evidence of scanner complementarity.
-
----
-
-# 10. Secure Baselines
-
-The baseline cases are designed to represent the absence of the target vulnerability.
-
-For example, B01 contains an S3 public-access block:
-
-```hcl
-block_public_acls       = true
-block_public_policy     = true
-ignore_public_acls      = true
-restrict_public_buckets = true
-```
-
-B02 restricts SSH to:
-
-```hcl
-cidr_blocks = ["10.0.0.0/16"]
-```
-
-B03 limits IAM access to:
-
-```hcl
-Action   = ["s3:GetObject"]
-Resource = "arn:aws:s3:::example-bucket/*"
-```
-
-B04 uses a sensitive Terraform variable for the database password:
-
-```hcl
-variable "db_password" {
-  type      = string
-  sensitive = true
-}
-```
-
-B05 configures S3 server-side encryption using AES256.
-
-The purpose of these cases is to check whether the scanners incorrectly report the target vulnerability when it is not present.
-
----
-
-# 11. Running the Project
-
-The original prototype can be started with:
+From the repository root:
 
 ```bash
-chmod +x run.sh
-./run.sh
+./scripts/run_kics.sh
+./scripts/run_trivy.sh
+./scripts/run_checkov.sh
 ```
 
-No AWS deployment is required for the scanner experiment.
+Raw results are saved under:
 
-The scanners analyse Terraform configuration files rather than requiring the infrastructure to actually exist in AWS.
-
----
-
-# 12. KICS
-
-KICS was run using Docker.
-
-Example:
-
-```bash
-docker run --rm -t \
--v "$(pwd)/dataset/synthetic/S01:/path" \
-checkmarx/kics:latest \
-scan -p /path
+```text
+results/
 ```
 
-For reproducible JSON output, the project uses an output directory:
-
-```bash
-docker run --rm -t \
--v "$(pwd)/$dir:/path" \
--v "$(pwd)/results/kics/$case_id:/results" \
-checkmarx/kics:latest \
-scan \
--p /path \
---report-formats json \
---output-path /results \
---output-name "$case_id"
-```
-
-This stores machine-readable results under:
+Controlled results are separated into:
 
 ```text
 results/kics/
+results/trivy/
+results/checkov/
 ```
 
-For example:
+Public-corpus results are stored under:
 
 ```text
-results/kics/S01/S01.json
-```
-
-The KICS JSON contains information such as:
-
-- severity;
-- query name;
-- CWE;
-- risk score;
-- affected files;
-- query ID;
-- total findings;
-- severity counters.
-
-Example S01 summary:
-
-```text
-CRITICAL = 1
-HIGH     = 1
-MEDIUM   = 6
-LOW      = 1
-INFO     = 1
-
-TOTAL = 10
+results/public/
 ```
 
 ---
 
-# 13. Trivy
+# 4. Experiment Analysis
 
-Trivy was used as another independent Terraform/IaC security scanner.
+The main analysis scripts are:
 
-Its results were stored and then normalised into the experiment data.
-
-The purpose is not to decide which tool is "best" from raw finding counts.
-
-Instead, the important question is:
-
-> Did the scanner detect the vulnerability that was intentionally introduced into the test case?
-
----
-
-# 14. Checkov
-
-Checkov was used as the third scanner.
-
-Checkov analyses Terraform configuration against security and compliance checks.
-
-Its findings were also normalised into the experiment data.
-
-Again, the experiment focuses on whether the **target vulnerability** was detected rather than simply counting every warning produced by a scanner.
-
----
-
-# 15. Why Raw Finding Counts Are Not Enough
-
-A scanner can produce many findings without necessarily detecting the vulnerability being tested.
-
-For example, one case may generate:
-
-```text
-10 findings
+```bash
+python3 experiment/scripts/generate_all_results.py
+python3 experiment/scripts/calculate_final_metrics.py
+python3 experiment/scripts/plot_final_metrics.py
 ```
 
-while another scanner generates:
+Important generated files include:
 
 ```text
-4 findings
+experiment/generated/detection_matrix.csv
+experiment/generated/tool_metrics.csv
+experiment/generated/final_results.csv
+experiment/generated/finding_counts.csv
+experiment/generated/combined_metrics.txt
+experiment/generated/final_experiment_summary.txt
+experiment/generated/public_dataset_results.csv
+experiment/generated/public_findings.csv
 ```
-
-That does not automatically mean the first scanner is better.
-
-Some findings may be:
-
-- informational;
-- unrelated to the target vulnerability;
-- best-practice recommendations;
-- duplicate observations of related configuration issues.
-
-Therefore, the experiment uses a **ground-truth detection matrix**.
 
 ---
 
-# 16. Detection Matrix
+# 5. Detection Matrix
 
-The final detection matrix was:
+The controlled experiment produces:
 
-```csv
+```text
+experiment/generated/detection_matrix.csv
+```
+
+The matrix records target-vulnerability detection for each scanner.
+
+```text
+1 = detected
+0 = not detected
+```
+
+Example:
+
+```text
 case_id,corpus,target_vulnerability,ground_truth,KICS,Trivy,Checkov
-S01,synthetic,public_s3_access,1,1,0,1
-S02,synthetic,unrestricted_security_group,1,1,1,1
-S03,synthetic,excessive_iam_privileges,1,1,0,1
-S04,synthetic,unsecured_rds,1,1,1,1
-S05,synthetic,unencrypted_s3,1,0,1,0
-B01,baseline,secure_s3,0,0,0,0
-B02,baseline,restricted_security_group,0,0,0,0
-B03,baseline,limited_iam_policy,0,0,0,0
-B04,baseline,secure_rds_password,0,0,0,0
-B05,baseline,encrypted_s3,0,0,0,0
+S01,synthetic,public_s3_access,1,1,1,1
+S02,synthetic,unrestricted_ssh_security_group,1,1,1,1
+...
 ```
 
-The values mean:
-
-```text
-1 = detected / vulnerable
-0 = not detected / not vulnerable
-```
+The ground truth is used to distinguish correct detection from missed detection.
 
 ---
 
-# 17. Confusion Matrix
+# 6. Final Controlled Benchmark
 
-The metrics use four standard quantities.
+The current controlled benchmark contains:
 
-| Term | Meaning |
-|---|---|
-| TP | Vulnerable case correctly detected |
-| TN | Secure case correctly left undetected |
-| FP | Secure case incorrectly reported as vulnerable |
-| FN | Vulnerable case missed |
+- 10 vulnerable synthetic cases
+- 10 secure baseline cases
 
-For example:
+The target-vulnerability detection results are:
 
-```text
-S01:
-Ground truth = 1
-KICS = 1
-
-=> TP for KICS
-```
-
-For B01:
-
-```text
-Ground truth = 0
-KICS = 0
-
-=> TN for KICS
-```
-
----
-
-# 18. Scanner Metrics
-
-The experiment produced the following results.
-
-| Metric | KICS | Trivy | Checkov |
-|---|---:|---:|---:|
-| TP | 4 | 3 | 4 |
-| TN | 5 | 5 | 5 |
-| FP | 0 | 0 | 0 |
-| FN | 1 | 2 | 1 |
-| Precision | 100.00% | 100.00% | 100.00% |
-| Recall | 80.00% | 60.00% | 80.00% |
-| F1-score | 88.89% | 75.00% | 88.89% |
-| Accuracy | 90.00% | 80.00% | 90.00% |
-| FPR | 0.00% | 0.00% | 0.00% |
-
-### Interpretation
-
-KICS and Checkov achieved:
-
-```text
-Recall = 80%
-F1-score = 88.89%
-Accuracy = 90%
-```
-
-Trivy achieved:
-
-```text
-Recall = 60%
-F1-score = 75%
-Accuracy = 80%
-```
-
-All three scanners achieved:
-
-```text
-Precision = 100%
-FPR = 0%
-```
-
-within this small experiment.
-
-The result should not be interpreted as proof that these scanners always have these performance levels. The dataset is intentionally small and controlled.
-
----
-
-# 19. Scanner Metrics Graph
-
-The following graph visualises the measured metrics:
-
-![Scanner performance metrics](scanner_metrics.png)
-
-The graph is generated from the observed experiment results.
-
----
-
-# 20. Complementarity
-
-The most interesting part of the experiment is not simply comparing the individual scores.
-
-It is examining **which vulnerabilities each tool detects or misses**.
-
-## S01
-
-```text
-Detected by: KICS, Checkov
-Missed by:   Trivy
-```
-
-## S02
-
-```text
-Detected by: KICS, Trivy, Checkov
-Missed by:   None
-```
-
-## S03
-
-```text
-Detected by: KICS, Checkov
-Missed by:   Trivy
-```
-
-## S04
-
-```text
-Detected by: KICS, Trivy, Checkov
-Missed by:   None
-```
-
-## S05
-
-```text
-Detected by: Trivy
-Missed by:   KICS, Checkov
-```
-
-The S05 result is especially useful because it shows a vulnerability detected by Trivy but missed by the other two scanners.
-
----
-
-# 21. Pairwise Complementarity
-
-The measured pairwise results were:
-
-| Scanner pair | Both detected | First only | Second only |
-|---|---:|---:|---:|
-| KICS vs Trivy | 2 | 2 | 1 |
-| KICS vs Checkov | 4 | 0 | 0 |
-| Trivy vs Checkov | 2 | 1 | 2 |
-
-This shows that KICS and Checkov behaved very similarly for these five target vulnerabilities, while Trivy contributed unique detection on S05.
-
----
-
-# 22. Combined Framework
-
-The combined approach uses a simple rule:
-
-```text
-If ANY scanner detects the target vulnerability:
-    Combined = 1
-else:
-    Combined = 0
-```
-
-In Boolean form:
-
-```text
-Combined = KICS OR Trivy OR Checkov
-```
-
-This is intentionally simple.
-
-The objective is to demonstrate the basic benefit of combining independent scanners before developing more sophisticated correlation or weighting methods.
-
----
-
-# 23. Combined Results
-
-The combined framework produced:
-
-| Metric | Combined framework |
+| Tool | Vulnerable cases detected |
 |---|---:|
-| TP | 5 |
-| TN | 5 |
-| FP | 0 |
-| FN | 0 |
-| Precision | 100.00% |
-| Recall | 100.00% |
-| F1-score | 100.00% |
-| Accuracy | 100.00% |
-| FPR | 0.00% |
+| KICS | 9/10 |
+| Trivy | 9/10 |
+| Checkov | 10/10 |
+| Combined | 10/10 |
 
-Case-level result:
+The combined framework takes the union of scanner detections. It therefore provides coverage at least as broad as the individual scanners for the evaluated target vulnerabilities.
+
+**Important:** scanner finding counts are not equivalent to target-vulnerability detection accuracy. A scanner can report additional security or compliance issues that are outside the experiment's target vulnerability.
+
+---
+
+# 7. Evaluation Metrics
+
+The framework evaluates:
+
+### Precision
 
 ```text
-S01 -> detected
-S02 -> detected
-S03 -> detected
-S04 -> detected
-S05 -> detected
-
-B01 -> not detected
-B02 -> not detected
-B03 -> not detected
-B04 -> not detected
-B05 -> not detected
+Precision = TP / (TP + FP)
 ```
 
-Therefore:
+### Recall
 
 ```text
-Vulnerable cases = 5
-Detected         = 5
-Missed           = 0
-Coverage         = 100%
+Recall = TP / (TP + FN)
+```
+
+### F1-score
+
+```text
+F1 = 2 × Precision × Recall / (Precision + Recall)
+```
+
+### False Positive Rate
+
+```text
+FPR = FP / (FP + TN)
+```
+
+Where:
+
+- **TP** = vulnerable case correctly detected
+- **FP** = secure baseline incorrectly flagged
+- **TN** = secure baseline correctly left undetected
+- **FN** = vulnerable case missed
+
+The current generated metric artefacts are available in:
+
+```text
+experiment/generated/tool_metrics.csv
+experiment/generated/final_results.csv
+experiment/results/tool_metrics.csv
 ```
 
 ---
 
-# 24. Important Interpretation of the 100% Result
+# 8. Final Graphs
 
-The 100% combined score should be presented carefully.
+All experiment graphs are kept in:
 
-It does **not** mean:
+```text
+experiment/graphs/
+```
 
-> The proposed framework is guaranteed to detect every Terraform vulnerability.
+## Overall Tool Performance
 
-It means:
+![Final Tool Performance](experiment/graphs/final_tool_performance.png)
 
-> Within the five vulnerable cases and five secure baseline cases used in this controlled experiment, the OR-based combination of KICS, Trivy and Checkov detected all five target vulnerabilities and produced no false positives against the five baseline cases.
+## Detection Comparison
 
-This distinction is important for academic reporting.
+![Detection Comparison](experiment/graphs/detection_comparison.png)
 
-The dataset is small, so the result demonstrates the behaviour of the prototype rather than universal scanner effectiveness.
+## Precision
 
----
+![Precision](experiment/graphs/precision_final.png)
 
-# 25. Finding-Level Results
+## Recall
 
-The scanners produced different numbers of total findings.
+![Recall](experiment/graphs/recall_final.png)
 
-| Tool | Vulnerable-case findings | Baseline findings | Total |
-|---|---:|---:|---:|
-| KICS | 38 | 25 | 63 |
-| Trivy | 27 | 21 | 48 |
-| Checkov | 40 | 24 | 64 |
+## F1 Score
 
-Case-level counts:
+![F1 Score](experiment/graphs/f1_final.png)
 
-| Case | KICS | Trivy | Checkov |
-|---|---:|---:|---:|
-| S01 | 10 | 8 | 12 |
-| S02 | 9 | 5 | 4 |
-| S03 | 5 | 0 | 9 |
-| S04 | 10 | 5 | 8 |
-| S05 | 4 | 9 | 7 |
-| B01 | 4 | 4 | 6 |
-| B02 | 7 | 4 | 3 |
-| B03 | 2 | 0 | 0 |
-| B04 | 8 | 5 | 8 |
-| B05 | 4 | 8 | 7 |
+## False Positive Rate
 
-These numbers show that scanners produce different quantities and types of findings even when analysing the same Terraform configuration.
+![False Positive Rate](experiment/graphs/fpr_final.png)
 
----
+## Scanner Complementarity
 
-# 26. Why the Finding Counts Differ
+![Scanner Complementarity](experiment/graphs/scanner_complementarity.png)
 
-KICS, Trivy and Checkov use different:
+## Unique Detection Contribution
 
-- rule sets;
-- security policies;
-- query/check identifiers;
-- severity classifications;
-- detection logic;
-- configuration assumptions.
+![Unique Detection Contribution](experiment/graphs/unique_detection_contribution.png)
 
-Therefore, it is expected that they do not produce identical findings.
+## Vulnerable vs Baseline
 
-For the research, this difference is useful because it creates the opportunity to study **complementarity**.
+![Vulnerable vs Baseline](experiment/graphs/vulnerable_vs_baseline.png)
+
+## Findings by Case
+
+![Findings by Case](experiment/graphs/findings_by_case.png)
 
 ---
 
-# 27. Custom Cross-Resource IAM Check
+# 9. Public Dataset Validation
 
-The project also contains a custom correlation check.
+The public corpus is analysed separately because complete ground truth is not available for every finding.
 
-The purpose is to identify a potentially dangerous relationship involving:
+The available projects are:
+
+```text
+dataset/public/P01
+dataset/public/P02
+dataset/public/P03
+dataset/public/P04
+dataset/public/P05
+```
+
+Scanner outputs:
+
+```text
+results/public/kics/
+results/public/trivy/
+results/public/checkov/
+```
+
+Generated public-dataset analysis:
+
+```text
+experiment/generated/public_dataset_results.csv
+experiment/generated/public_findings.csv
+experiment/generated/public_validation.csv
+experiment/generated/public/
+```
+
+Public-corpus graphs include:
+
+![Public Findings by Case](experiment/graphs/public_findings_by_case.png)
+
+![Public Scanner Comparison](experiment/graphs/public_scanner_comparison.png)
+
+![Public Scanner Findings](experiment/graphs/public_scanner_findings.png)
+
+![Public Average Findings](experiment/graphs/public_average_findings.png)
+
+The public corpus demonstrates that different scanners report different security findings for the same Terraform projects, supporting the investigation of scanner complementarity.
+
+---
+
+# 10. Scanner Complementarity
+
+Different scanners use different rule sets, policies, resource coverage and security heuristics.
+
+Therefore, two scanners can analyse the same Terraform project and produce different findings.
+
+The framework considers:
+
+```text
+Individual detection
+        +
+False-positive behaviour
+        +
+Finding overlap
+        +
+Unique detection contribution
+        =
+Multi-scanner security coverage
+```
+
+The combined framework uses the union of detections rather than assuming that one scanner is a complete security oracle.
+
+---
+
+# 11. Cross-Resource IAM Analysis
+
+The repository also includes a custom analysis:
+
+```text
+results/custom-iam.txt
+```
+
+This addresses security relationships that can span multiple Terraform resources.
+
+One evaluated example combines:
 
 ```text
 iam:PassRole
-```
-
-and:
-
-```text
++
 ec2:RunInstances
 ```
 
-Individually, each permission may not tell the complete security story.
+to identify a potential privilege-escalation path.
 
-Together, they can create a potentially significant privilege path.
-
-The custom check therefore looks across resources and policies rather than treating every Terraform resource independently.
-
-Example conceptual result:
-
-```text
-PassRole found
-RunInstances found
-
-=> Potential cross-resource privilege path
-```
-
-This is different from a normal single-resource rule.
+This complements conventional single-resource scanner rules.
 
 ---
 
-# 28. Why Cross-Resource Analysis Matters
+# 12. Reproducibility
 
-Traditional static IaC scanners often operate using individual checks.
+A typical reproduction workflow is:
 
-However, some security problems depend on the relationship between multiple permissions or resources.
+```bash
+git clone <repository>
+cd terraform-security-lab
 
-For example:
+./scripts/run_kics.sh
+./scripts/run_trivy.sh
+./scripts/run_checkov.sh
+
+python3 experiment/scripts/generate_all_results.py
+python3 experiment/scripts/calculate_final_metrics.py
+python3 experiment/scripts/plot_final_metrics.py
+```
+
+Generated artefacts are placed in:
 
 ```text
-IAM permission
-      +
-EC2 permission
+experiment/generated/
+experiment/graphs/
+```
+
+Scanner versions should be recorded when reproducing the experiment because rule sets and findings can change between releases.
+
+---
+
+# 13. Interpretation
+
+The project distinguishes between two different measurements:
+
+### Target-vulnerability detection
+
+Whether a scanner detects the vulnerability explicitly defined by the experiment's ground truth.
+
+### Security finding volume
+
+The total number of security/compliance findings reported by a scanner.
+
+These must not be treated as the same metric.
+
+For example, a scanner can report:
+
+- missing logging;
+- missing tags;
+- encryption recommendations;
+- missing descriptions;
+- monitoring recommendations;
+- IAM policy concerns;
+
+without necessarily detecting the specific target vulnerability.
+
+Therefore:
+
+> **Finding count alone should not be interpreted as detection accuracy.**
+
+---
+
+# 14. Limitations
+
+The current experiment has several limitations:
+
+1. The controlled benchmark is relatively small.
+2. The public validation corpus contains five projects.
+3. Scanner rule sets change between releases.
+4. Different scanners can classify the same underlying weakness differently.
+5. Public projects do not provide complete ground truth for every finding.
+6. Static analysis cannot prove runtime exploitability for every finding.
+7. The combined framework currently uses scanner-result union rather than a learned ensemble model.
+
+---
+
+# 15. Future Work
+
+Potential extensions include:
+
+- expanding the public Terraform corpus;
+- adding more vulnerability classes;
+- evaluating additional scanners;
+- version-controlled scanner benchmarking;
+- duplicate-finding normalisation;
+- severity-weighted scoring;
+- automated cross-resource dependency analysis;
+- runtime validation of selected findings;
+- CI/CD integration;
+- SARIF-based result aggregation;
+- larger-scale statistical evaluation.
+
+---
+
+# 16. Research Contribution
+
+The implemented workflow provides a reproducible multi-layer validation approach:
+
+```text
+Terraform IaC
+      |
+      +---- KICS
+      |
+      +---- Trivy
+      |
+      +---- Checkov
+      |
+      +---- Custom cross-resource analysis
       |
       v
-Potential privilege path
+Security findings
+      |
+      v
+Ground-truth validation
+      |
+      v
+Precision / Recall / F1 / FPR
+      |
+      v
+Complementarity analysis
+      |
+      v
+Combined security coverage
 ```
 
-This motivates the multi-layer design.
-
-The prototype therefore has two levels:
-
-### Layer 1 – Existing scanners
-
-```text
-KICS
-Trivy
-Checkov
-```
-
-### Layer 2 – Custom correlation
-
-```text
-Cross-resource IAM relationship analysis
-```
-
-The second layer is intended to demonstrate how a research framework can extend beyond the individual rule sets of existing scanners.
+The main conclusion supported by the experiment is that **multi-tool IaC security validation can provide broader coverage than relying on a single scanner**, while requiring explicit ground truth and careful false-positive analysis.
 
 ---
 
-# 29. Reproducibility
+## Project Status
 
-The experiment is designed to be reproducible.
+**Research experiment and analysis complete.**
 
-The main requirements are:
-
-- Linux environment;
-- Terraform;
-- Docker;
-- KICS container;
-- Trivy;
-- Checkov;
-- Python 3.
-
-The Terraform cases are local files.
-
-No AWS deployment is required for the core scanning experiment.
-
----
-
-# 30. Main Experiment Scripts
-
-### Tool metrics
-
-```bash
-python3 experiment/tool_metrics.py
-```
-
-This calculates:
-
-- TP;
-- TN;
-- FP;
-- FN;
-- precision;
-- recall;
-- F1-score;
-- accuracy;
-- false-positive rate.
-
----
-
-### Combined metrics
-
-```bash
-python3 experiment/combined_metrics.py
-```
-
-This treats a target vulnerability as detected if at least one scanner detects it.
-
-Conceptually:
-
-```text
-KICS OR Trivy OR Checkov
-```
-
----
-
-### Complementarity
-
-```bash
-python3 experiment/complementarity.py
-```
-
-This identifies:
-
-- which scanners detect each vulnerable case;
-- which scanners miss each case;
-- pairwise overlap;
-- scanner-specific detections;
-- overall vulnerable-case coverage.
-
----
-
-# 31. What the Experiment Demonstrates
-
-The prototype demonstrates five main points.
-
-### 1. Individual scanners have different detection coverage
-
-KICS and Checkov achieved 80% recall in the controlled dataset.
-
-Trivy achieved 60% recall.
-
-### 2. No individual scanner detected every target vulnerability
-
-Each scanner missed at least one vulnerable case.
-
-### 3. Scanner outputs are complementary
-
-For example:
-
-```text
-S05 -> Trivy detected it
-       KICS missed it
-       Checkov missed it
-```
-
-### 4. Combining scanners improved target-case coverage
-
-The combined OR-based approach detected:
-
-```text
-5 / 5 vulnerable cases
-```
-
-### 5. Cross-resource checks can extend normal static scanning
-
-The custom IAM correlation check demonstrates a second analysis layer.
-
----
-
-# 32. Limitations
-
-This is a **small technical prototype**, not a production benchmark.
-
-Important limitations include:
-
-1. Only five vulnerable cases are used for the main detection experiment.
-2. Only five secure baseline cases are used for false-positive evaluation.
-3. The cases are controlled rather than sampled randomly from a large corpus.
-4. The combined detector uses a simple OR rule.
-5. Scanner finding counts are not directly comparable as vulnerability counts.
-6. The experiment does not measure runtime performance in the current results.
-7. AWS infrastructure is not deployed as part of the core experiment.
-8. The 100% combined result is therefore specific to this test set.
-
-These limitations should be acknowledged in the research report.
-
----
-
-# 33. Suggested Research Interpretation
-
-A suitable interpretation is:
-
-> The prototype indicates that different Terraform security scanners can exhibit complementary detection behaviour. While individual scanners missed some intentionally introduced vulnerabilities, combining their target-case detections resulted in complete coverage across the five vulnerable cases in this controlled dataset. The result provides preliminary evidence supporting a multi-layer validation approach, while the small dataset means that broader evaluation is required before generalising the findings.
-
----
-
-# 34. Future Extensions
-
-The prototype can later be extended with:
-
-- larger public Terraform datasets;
-- Kaggle or GitHub-derived IaC datasets;
-- additional vulnerable configurations;
-- more secure baselines;
-- repeated experiments;
-- runtime measurements;
-- finding normalisation;
-- duplicate finding detection;
-- severity-weighted metrics;
-- HTML dashboards;
-- automated report generation;
-- more cross-resource security rules;
-- statistical analysis.
-
-A larger dataset would make the evaluation more statistically meaningful.
-
----
-
-# 35. Current Key Results
-
-### Individual scanners
-
-```text
-KICS
-Recall    = 80%
-F1-score  = 88.89%
-Accuracy  = 90%
-
-Trivy
-Recall    = 60%
-F1-score  = 75%
-Accuracy  = 80%
-
-Checkov
-Recall    = 80%
-F1-score  = 88.89%
-Accuracy  = 90%
-```
-
-### Combined approach
-
-```text
-Precision = 100%
-Recall    = 100%
-F1-score  = 100%
-Accuracy  = 100%
-FPR       = 0%
-```
-
-### Coverage
-
-```text
-5 vulnerable cases
-5 detected
-0 missed
-
-Coverage = 100%
-```
-
-Again, these results apply only to the current controlled experiment.
-
----
-
-# 36. Final Takeaway
-
-The project is intentionally small.
-
-The purpose is not to build a complicated security platform.
-
-The purpose is to demonstrate a clear research workflow:
-
-```text
-Known Terraform vulnerability
-            ↓
-        Ground truth
-            ↓
-   ┌────────┼────────┐
-   ↓        ↓        ↓
- KICS     Trivy   Checkov
-   └────────┼────────┘
-            ↓
-      Compare results
-            ↓
-       Calculate metrics
-            ↓
-    Analyse complementarity
-            ↓
-   Combine scanner coverage
-            ↓
- Cross-resource correlation
-```
-
-This provides a simple technical foundation for the broader research question:
-
-> **Can a multi-layer Terraform security validation approach improve detection coverage compared with relying on a single IaC security scanner?**
+The repository contains the datasets, raw scanner outputs, ground-truth data, experiment scripts, generated metrics, graphs, public-dataset validation, and custom cross-resource IAM analysis required to reproduce the reported evaluation.
