@@ -1,0 +1,25 @@
+TERRAFORM MULTI-LAYER SECURITY VALIDATION EXPERIMENT
+====================================================
+
+DATASETS
+----------------------------------------------------
+Synthetic vulnerable cases : 10
+Secure baseline cases      : 10
+Public Terraform cases     : 5
+
+CONTROLLED EVALUATION
+----------------------------------------------------
+The synthetic and secure baseline corpora are used
+for TP, TN, FP, FN and classification metrics.
+
+EXTERNAL VALIDATION
+----------------------------------------------------
+The public Terraform corpus is used to examine
+real-world scanner findings, finding volume,
+severity distribution and scanner complementarity.
+
+SECURITY SCANNERS
+----------------------------------------------------
+KICS
+Trivy
+Checkov

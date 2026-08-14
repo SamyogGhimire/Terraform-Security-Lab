@@ -1,0 +1,76 @@
+======================================================================
+TERRAFORM SECURITY VALIDATION EXPERIMENT
+======================================================================
+
+DATASET
+----------------------------------------------------------------------
+Synthetic vulnerable cases : 10
+Secure baseline cases      : 10
+Total cases                : 20
+Security scanners          : KICS, Trivy, Checkov
+
+FINDINGS BY TOOL
+----------------------------------------------------------------------
+KICS       Vulnerable=  81 Baseline=  49 Total= 130
+Trivy      Vulnerable=  51 Baseline=  31 Total=  82
+Checkov    Vulnerable=  84 Baseline=  46 Total= 130
+
+CASE-LEVEL FINDINGS
+----------------------------------------------------------------------
+Case        KICS   Trivy   Checkov
+S01           10       8        12
+S02            9       5         4
+S03            5       0         9
+S04           10       5         8
+S05            4       9         7
+S06           10       8        12
+S07            9       5         4
+S08            4       2         4
+S09           11       3        14
+S10            9       6        10
+B01            4       4         6
+B02            7       4         3
+B03            2       0         0
+B04            8       5         8
+B05            4       8         7
+B06            4       3         5
+B07            5       2         3
+B08            2       0         0
+B09            6       2         7
+B10            7       3         7
+
+TOOL METRICS
+----------------------------------------------------------------------
+
+KICS
+TP        : 10
+TN        : 0
+FP        : 10
+FN        : 0
+Precision : 50.00%
+Recall    : 100.00%
+F1-score  : 66.67%
+Accuracy  : 50.00%
+FPR       : 100.00%
+
+Trivy
+TP        : 9
+TN        : 2
+FP        : 8
+FN        : 1
+Precision : 52.94%
+Recall    : 90.00%
+F1-score  : 66.67%
+Accuracy  : 55.00%
+FPR       : 80.00%
+
+Checkov
+TP        : 10
+TN        : 2
+FP        : 8
+FN        : 0
+Precision : 55.56%
+Recall    : 100.00%
+F1-score  : 71.43%
+Accuracy  : 60.00%
+FPR       : 80.00%

@@ -1,0 +1,168 @@
+Tool,Case,Finding_ID,Finding_Name
+KICS,P01,381c3f2a-ef6f-4eff-99f7-b169cda3422c,Sensitive Port Is Exposed To Entire Network
+KICS,P01,4728cd65-a20c-49da-8b31-9c08b423e4db,Unrestricted Security Group Ingress
+KICS,P01,afecd1f1-6378-4f7e-bb3b-60c35801fdd4,ALB Deletion Protection Disabled
+KICS,P01,0afa6ab8-a047-48cf-be07-93a2f8c34cf7,ALB Is Not Integrated With WAF
+KICS,P01,de7f5e83-da88-4046-871f-ea18504b1d43,ALB Listening on HTTP
+KICS,P01,6e3fd2ed-5c83-4c68-9679-7700d224d379,ALB Not Dropping Invalid Headers
+KICS,P01,8e94dced-9bcc-4203-8eb7-7e41202b2505,Auto Scaling Group With No Associated ELB
+KICS,P01,0afbcfe9-d341-4b92-a64c-7e6de0543879,CloudWatch Log Group Without KMS
+KICS,P01,5a2486aa-facf-477d-a5c1-b010789459ce,EC2 Instance Has Public IP
+KICS,P01,23b70e32-032e-4fa6-ba5c-82f56b9980e6,EC2 Instance Monitoring Disabled
+KICS,P01,3e34db4f-0ad9-4290-bfd0-4a9ee884acaf,ELBv2 LB Access Log Disabled
+KICS,P01,65905cec-d691-4320-b320-2000436cb696,Security Group With Unrestricted Access To SSH
+KICS,P01,97cb0688-369a-4d26-b1f7-86c4c91231bc,ECS Cluster with Container Insights Disabled
+KICS,P01,e592a0c5-5bdb-414c-9066-5dba7cdea370,IAM Access Analyzer Not Enabled
+KICS,P01,c306ac53-ee5b-41d3-86a9-0fd2722b4e67,Instance Uses Metadata Service IMDSv1
+KICS,P01,ef0b316a-211e-42f1-888e-64efe172b755,CloudWatch Without Retention Period Specified
+KICS,P01,1e434b25-8763-4b00-a5ca-ca03b7abbb66,Name Is Not Snake Case
+KICS,P01,59312e8a-a64e-41e7-a252-618533dd1ea8,Output Without Description
+KICS,P01,e38a8e0a-b88b-4902-b3fe-b0fcb17d5c10,Resource Not Using Tags
+KICS,P01,68eb4bf3-f9bf-463d-b5cf-e029bb446d2e,Security Group Rule Without Description
+KICS,P01,cb3f5ed6-0d18-40de-a93d-b3538db31e8c,Security Group Without Description
+KICS,P01,2a153952-2544-4687-bcc9-cc8fea814a9b,Variable Without Description
+KICS,P01,fc5109bf-01fd-49fb-8bde-4492b543c34a,Variable Without Type
+Trivy,P01,AVD-AWS-0008,Launch configuration with unencrypted block device.
+Trivy,P01,AVD-AWS-0017,CloudWatch log groups should be encrypted using CMK
+Trivy,P01,AVD-AWS-0034,ECS clusters should have container insights enabled
+Trivy,P01,AVD-AWS-0104,An egress security group rule allows traffic to /0.
+Trivy,P01,AVD-AWS-0124,Missing description for security group rule.
+Trivy,P01,AVD-AWS-0130,aws_instance should activate session tokens for Instance Metadata Service.
+Trivy,P01,AVD-AWS-0052,Load balancers should drop invalid headers
+Trivy,P01,AVD-AWS-0053,Load balancer is exposed to the internet.
+Trivy,P01,AVD-AWS-0054,Use of plain HTTP.
+Trivy,P01,AVD-AWS-0107,An ingress security group rule allows traffic from /0.
+Checkov,P01,CKV_AWS_315,Ensure EC2 Auto Scaling groups use EC2 launch templates
+Checkov,P01,CKV_AWS_79,Ensure Instance Metadata Service Version 1 is not enabled
+Checkov,P01,CKV_AWS_8,Ensure all data stored in the Launch configuration or instance Elastic Blocks Store is securely encrypted
+Checkov,P01,CKV_AWS_23,Ensure every security group and rule has a description
+Checkov,P01,CKV_AWS_65,Ensure container insights are enabled on ECS cluster
+Checkov,P01,CKV_AWS_66,Ensure that CloudWatch Log Group specifies retention days
+Checkov,P01,CKV_AWS_158,Ensure that CloudWatch Log Group is encrypted by KMS
+Checkov,P01,CKV_AWS_338,Ensure CloudWatch log groups retains logs for at least 1 year
+Checkov,P01,CKV_AWS_260,Ensure no security groups allow ingress from 0.0.0.0:0 to port 80
+Checkov,P01,CKV_AWS_382,Ensure no security groups allow egress from 0.0.0.0:0 to port -1
+Checkov,P01,CKV_AWS_261,Ensure HTTP HTTPS Target group defines Healthcheck
+Checkov,P01,CKV_AWS_91,Ensure the ELBv2 (Application/Network) has access logging enabled
+Checkov,P01,CKV_AWS_131,Ensure that ALB drops HTTP headers
+Checkov,P01,CKV_AWS_150,Ensure that Load Balancer has deletion protection enabled
+Checkov,P01,CKV_AWS_2,Ensure ALB protocol is HTTPS
+Checkov,P01,CKV_TF_1,Ensure Terraform module sources use a commit hash
+Checkov,P01,CKV_TF_2,Ensure Terraform module sources use a tag with a version number
+Checkov,P01,CKV2_AWS_20,Ensure that ALB redirects HTTP requests into HTTPS ones
+Checkov,P01,CKV2_AWS_41,Ensure an IAM role is attached to EC2 instance
+Checkov,P01,CKV2_AWS_28,Ensure public facing ALB are protected by WAF
+Checkov,P01,CKV_AWS_103,Ensure that load balancer is using at least TLS 1.2
+Checkov,P01,CKV_AWS_378,Ensure AWS Load Balancer doesn't use HTTP protocol
+KICS,P02,f861041c-8c9f-4156-acfc-5e6e524f5884,S3 Bucket Logging Disabled
+KICS,P02,e592a0c5-5bdb-414c-9066-5dba7cdea370,IAM Access Analyzer Not Enabled
+KICS,P02,1e434b25-8763-4b00-a5ca-ca03b7abbb66,Name Is Not Snake Case
+KICS,P02,59312e8a-a64e-41e7-a252-618533dd1ea8,Output Without Description
+KICS,P02,e38a8e0a-b88b-4902-b3fe-b0fcb17d5c10,Resource Not Using Tags
+KICS,P02,fc5109bf-01fd-49fb-8bde-4492b543c34a,Variable Without Type
+Trivy,P02,AVD-AWS-0086,S3 Access block should block public ACL
+Trivy,P02,AVD-AWS-0087,S3 Access block should block public policy
+Trivy,P02,AVD-AWS-0088,Unencrypted S3 bucket.
+Trivy,P02,s3-bucket-logging,S3 Bucket Logging
+Trivy,P02,AVD-AWS-0091,S3 Access Block should Ignore Public Acl
+Trivy,P02,AVD-AWS-0093,S3 Access block should restrict public bucket to limit access
+Trivy,P02,AVD-AWS-0094,S3 buckets should each define an aws_s3_bucket_public_access_block
+Trivy,P02,AVD-AWS-0132,S3 encryption should use Customer Managed Keys
+Checkov,P02,CKV2_AWS_6,Ensure that S3 bucket has a Public Access block
+Checkov,P02,CKV2_AWS_62,Ensure S3 buckets should have event notifications enabled
+Checkov,P02,CKV_AWS_145,Ensure that S3 buckets are encrypted with KMS by default
+Checkov,P02,CKV_AWS_18,Ensure the S3 bucket has access logging enabled
+Checkov,P02,CKV_AWS_144,Ensure that S3 bucket has cross-region replication enabled
+KICS,P03,5a2486aa-facf-477d-a5c1-b010789459ce,EC2 Instance Has Public IP
+KICS,P03,23b70e32-032e-4fa6-ba5c-82f56b9980e6,EC2 Instance Monitoring Disabled
+KICS,P03,f83121ea-03da-434f-9277-9cd247ab3047,VPC FlowLogs Disabled
+KICS,P03,fd632aaf-b8a1-424d-a4d1-0de22fd3247a,VPC Without Network Firewall
+KICS,P03,e592a0c5-5bdb-414c-9066-5dba7cdea370,IAM Access Analyzer Not Enabled
+KICS,P03,c306ac53-ee5b-41d3-86a9-0fd2722b4e67,Instance Uses Metadata Service IMDSv1
+KICS,P03,084c6686-2a70-4710-91b1-000393e54c12,Shield Advanced Not In Use
+KICS,P03,60224630-175a-472a-9e23-133827040766,EC2 Not EBS Optimized
+KICS,P03,59312e8a-a64e-41e7-a252-618533dd1ea8,Output Without Description
+KICS,P03,e38a8e0a-b88b-4902-b3fe-b0fcb17d5c10,Resource Not Using Tags
+KICS,P03,68eb4bf3-f9bf-463d-b5cf-e029bb446d2e,Security Group Rule Without Description
+KICS,P03,cb3f5ed6-0d18-40de-a93d-b3538db31e8c,Security Group Without Description
+KICS,P03,2a153952-2544-4687-bcc9-cc8fea814a9b,Variable Without Description
+KICS,P03,fc5109bf-01fd-49fb-8bde-4492b543c34a,Variable Without Type
+Trivy,P03,AVD-AWS-0028,aws_instance should activate session tokens for Instance Metadata Service.
+Trivy,P03,AVD-AWS-0099,Missing description for security group.
+Trivy,P03,AVD-AWS-0104,An egress security group rule allows traffic to /0.
+Trivy,P03,AVD-AWS-0124,Missing description for security group rule.
+Trivy,P03,AVD-AWS-0131,Instance with unencrypted block device.
+Trivy,P03,AVD-AWS-0178,"VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC. After you've created a flow log, you can view and retrieve its data in Amazon CloudWatch Logs. It is recommended that VPC Flow Logs be enabled for packet ""Rejects"" for VPCs."
+Checkov,P03,CKV_AWS_23,Ensure every security group and rule has a description
+Checkov,P03,CKV_AWS_382,Ensure no security groups allow egress from 0.0.0.0:0 to port -1
+Checkov,P03,CKV_AWS_79,Ensure Instance Metadata Service Version 1 is not enabled
+Checkov,P03,CKV_AWS_8,Ensure all data stored in the Launch configuration or instance Elastic Blocks Store is securely encrypted
+Checkov,P03,CKV_AWS_135,Ensure that EC2 is EBS optimized
+Checkov,P03,CKV_AWS_126,Ensure that detailed monitoring is enabled for EC2 instances
+Checkov,P03,CKV2_AWS_41,Ensure an IAM role is attached to EC2 instance
+Checkov,P03,CKV2_AWS_11,Ensure VPC flow logging is enabled in all VPCs
+Checkov,P03,CKV2_AWS_12,Ensure the default security group of every VPC restricts all traffic
+KICS,P04,b1d51728-7270-4991-ac2f-fc26e2695b38,Disk Encryption Disabled
+KICS,P04,3e4d5ce6-3280-4027-8010-c26eeea1ec01,Project-wide SSH Keys Are Enabled In VM Instances
+KICS,P04,3cb4af0b-056d-4fb1-8b95-fdc4593625ff,Using Default Service Account
+KICS,P04,2a153952-2544-4687-bcc9-cc8fea814a9b,Variable Without Description
+KICS,P04,fc5109bf-01fd-49fb-8bde-4492b543c34a,Variable Without Type
+Trivy,P04,AVD-GCP-0027,An inbound firewall rule allows traffic from /0.
+Trivy,P04,AVD-GCP-0030,Disable project-wide SSH keys for all instances
+Trivy,P04,AVD-GCP-0031,Instances should not have public IP addresses
+Trivy,P04,AVD-GCP-0033,VM disks should be encrypted with Customer Supplied Encryption Keys
+Trivy,P04,AVD-GCP-0034,Disks should be encrypted with customer managed encryption keys
+Trivy,P04,AVD-GCP-0041,Instances should have Shielded VM VTPM enabled
+Trivy,P04,AVD-GCP-0045,Instances should have Shielded VM integrity monitoring enabled
+Trivy,P04,AVD-GCP-0067,Instances should have Shielded VM secure boot enabled
+Checkov,P04,CKV_GCP_37,Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK)
+Checkov,P04,CKV_GCP_40,Ensure that Compute instances do not have public IP addresses
+Checkov,P04,CKV_GCP_38,Ensure VM disks for critical VMs are encrypted with Customer Supplied Encryption Keys (CSEK)
+Checkov,P04,CKV_GCP_32,Ensure 'Block Project-wide SSH keys' is enabled for VM instances
+Checkov,P04,CKV_GCP_39,Ensure Compute instances are launched with Shielded VM enabled
+KICS,P05,a5613650-32ec-4975-a305-31af783153ea,Default Azure Storage Account Network Access Is Too Permissive
+KICS,P05,487f4be7-3fd9-4506-a07a-eae252180c08,Passwords And Secrets - Generic Password
+KICS,P05,a3a055d2-9a2e-4cc9-b9fb-12850a1a3a4b,AD Admin Not Configured For SQL Server
+KICS,P05,b897dfbf-322c-45a8-b67c-1e698beeaa51,Admin User Enabled For Container Registry
+KICS,P05,dafe30ec-325d-4516-85d1-e8e6776f012c,Azure Instance Using Basic Authentication
+KICS,P05,83a229ba-483e-47c6-8db7-dc96969bce5a,SQL Database Audit Disabled
+KICS,P05,f7e296b0-6660-4bc5-8f87-22ac4a815edf,SQL Server Auditing Disabled
+KICS,P05,12944ec4-1fa0-47be-8b17-42a034f937c2,Storage Account Not Forcing HTTPS
+KICS,P05,5400f379-a347-4bdd-a032-446465fdcc6f,Trusted Microsoft Services Not Enabled
+KICS,P05,b4cc2c52-34a6-4b43-b57c-4bdeb4514a5a,Virtual Network with DDoS Protection Plan disabled
+KICS,P05,59312e8a-a64e-41e7-a252-618533dd1ea8,Output Without Description
+KICS,P05,2a153952-2544-4687-bcc9-cc8fea814a9b,Variable Without Description
+KICS,P05,fc5109bf-01fd-49fb-8bde-4492b543c34a,Variable Without Type
+Trivy,P05,AVD-AZU-0011,The minimum TLS version for Storage Accounts should be TLS1_2
+Trivy,P05,AVD-AZU-0022,Ensure databases are not publicly accessible
+Trivy,P05,AVD-AZU-0026,Databases should have the minimum TLS set for connections
+Trivy,P05,AVD-AZU-0027,Auditing should be enabled on Azure SQL Databases
+Trivy,P05,AVD-AZU-0039,Password authentication should be disabled on Azure virtual machines
+Checkov,P05,CKV_AZURE_190,Ensure that Storage blobs restrict public access
+Checkov,P05,CKV_AZURE_59,Ensure that Storage accounts disallow public access
+Checkov,P05,CKV_AZURE_206,Ensure that Storage Accounts use replication
+Checkov,P05,CKV_AZURE_44,Ensure Storage Account is using the latest version of TLS encryption
+Checkov,P05,CKV_AZURE_33,"Ensure Storage logging is enabled for Queue service for read, write and delete requests"
+Checkov,P05,CKV_AZURE_237,Ensure dedicated data endpoints are enabled.
+Checkov,P05,CKV_AZURE_233,Ensure Azure Container Registry (ACR) is zone redundant
+Checkov,P05,CKV_AZURE_164,Ensures that ACR uses signed/trusted images
+Checkov,P05,CKV_AZURE_167,Ensure a retention policy is set to cleanup untagged manifests.
+Checkov,P05,CKV_AZURE_166,"Ensure container image quarantine, scan, and mark images verified"
+Checkov,P05,CKV_AZURE_139,Ensure ACR set to disable public networking
+Checkov,P05,CKV_AZURE_137,Ensure ACR admin account is disabled
+Checkov,P05,CKV_AZURE_165,Ensure geo-replicated container registries to match multi-region container deployments.
+Checkov,P05,CKV_AZURE_163,Enable vulnerability scanning for container images.
+Checkov,P05,CKV_AZURE_1,Ensure Azure Instance does not use basic authentication(Use SSH Key Instead)
+Checkov,P05,CKV2_AZURE_33,Ensure storage account is configured with private endpoint
+Checkov,P05,CKV2_AZURE_10,Ensure that Microsoft Antimalware is configured to automatically updates for Virtual Machines
+Checkov,P05,CKV2_AZURE_2,Ensure that Vulnerability Assessment (VA) is enabled on a SQL server by setting a Storage Account
+Checkov,P05,CKV2_AZURE_40,Ensure storage account is not configured with Shared Key authorization
+Checkov,P05,CKV2_AZURE_38,Ensure soft-delete is enabled on Azure storage account
+Checkov,P05,CKV2_AZURE_12,Ensure that virtual machines are backed up using Azure Backup
+Checkov,P05,CKV2_AZURE_41,Ensure storage account is configured with SAS expiration policy
+Checkov,P05,CKV2_AZURE_47,Ensure storage account is configured without blob anonymous access
+Checkov,P05,CKV2_AZURE_7,Ensure that Azure Active Directory Admin is configured
+Checkov,P05,CKV2_AZURE_1,Ensure storage for critical data are encrypted with Customer Managed Key
+Checkov,P05,CKV_AZURE_24,Ensure that 'Auditing' Retention is 'greater than 90 days' for SQL servers
+Checkov,P05,CKV_AZURE_23,Ensure that 'Auditing' is set to 'On' for SQL servers
+Checkov,P05,CKV2_AZURE_31,Ensure VNET subnet is configured with a Network Security Group (NSG)

@@ -1,0 +1,10 @@
+Tool,Severity,Findings
+KICS,HIGH,4
+KICS,INFO,24
+KICS,LOW,8
+KICS,MEDIUM,25
+Trivy,CRITICAL,8
+Trivy,HIGH,19
+Trivy,LOW,22
+Trivy,MEDIUM,19
+Checkov,N/A,124

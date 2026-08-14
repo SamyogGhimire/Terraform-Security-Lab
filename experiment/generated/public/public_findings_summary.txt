@@ -1,0 +1,27 @@
+PUBLIC DATASET FINDINGS
+============================================================
+
+P01
+KICS: ERROR
+Trivy: 15
+Checkov: ERROR
+
+P02
+KICS: ERROR
+Trivy: 8
+Checkov: ERROR
+
+P03
+KICS: ERROR
+Trivy: 8
+Checkov: ERROR
+
+P04
+KICS: ERROR
+Trivy: 25
+Checkov: ERROR
+
+P05
+KICS: ERROR
+Trivy: 12
+Checkov: ERROR

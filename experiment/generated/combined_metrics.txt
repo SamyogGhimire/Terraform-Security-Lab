@@ -1,0 +1,12 @@
+COMBINED SECURITY VALIDATION FRAMEWORK
+==================================================
+
+TP        : 10
+TN        : 0
+FP        : 10
+FN        : 0
+Precision : 50.00%
+Recall    : 100.00%
+F1-score  : 66.67%
+Accuracy  : 50.00%
+FPR       : 100.00%

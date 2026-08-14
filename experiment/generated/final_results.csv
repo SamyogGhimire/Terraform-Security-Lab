@@ -1,0 +1,4 @@
+Dataset,Tool,TP,TN,FP,FN,Precision,Recall,F1,Accuracy,FPR
+Controlled,KICS,10,0,10,0,50.00,100.00,66.67,50.00,100.00
+Controlled,Trivy,9,2,8,1,52.94,90.00,66.67,55.00,80.00
+Controlled,Checkov,10,2,8,0,55.56,100.00,71.43,60.00,80.00

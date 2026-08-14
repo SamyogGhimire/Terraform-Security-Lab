@@ -1,0 +1,14 @@
+PUBLIC TERRAFORM DATASET ANALYSIS
+======================================================================
+
+KICS       Total findings=  61 | Cases with findings=5/5
+Trivy      Total findings=  68 | Cases with findings=5/5
+Checkov    Total findings= 124 | Cases with findings=5/5
+
+FINDINGS BY CASE
+----------------------------------------------------------------------
+P01    KICS= 23 Trivy= 15 Checkov= 33
+P02    KICS=  6 Trivy=  8 Checkov=  5
+P03    KICS= 14 Trivy=  8 Checkov=  9
+P04    KICS=  5 Trivy= 25 Checkov= 15
+P05    KICS= 13 Trivy= 12 Checkov= 62

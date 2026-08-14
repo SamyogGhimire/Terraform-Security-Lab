@@ -1,0 +1,1382 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-08-14T12:16:28.52469298+05:30",
+  "ArtifactName": "dataset/public/P05",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "app_kubernetes/app_kubernetes.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 2,
+        "Failures": 2,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0011",
+          "AVDID": "AVD-AZU-0011",
+          "Title": "The minimum TLS version for Storage Accounts should be TLS1_2",
+          "Description": "Azure Storage currently supports three versions of the TLS protocol: 1.0, 1.1, and 1.2. \n\nAzure Storage uses TLS 1.2 on public HTTPS endpoints, but TLS 1.0 and TLS 1.1 are still supported for backward compatibility.\n\nThis check will warn if the minimum TLS is not set to TLS1_2.",
+          "Message": "Storage account uses an insecure TLS version.",
+          "Query": "data..",
+          "Resolution": "Use a more recent TLS/SSL policy for the load balancer",
+          "Severity": "CRITICAL",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0011",
+          "References": [
+            "https://docs.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version",
+            "https://avd.aquasec.com/misconfig/avd-azu-0011"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.app_production",
+            "Provider": "Azure",
+            "Service": "storage",
+            "StartLine": 34,
+            "EndLine": 39,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 34,
+                  "Content": "resource \"azurerm_storage_account\" \"app\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_storage_account\"\u001b[0m \u001b[38;5;37m\"app\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 35,
+                  "Content": "  name                = \"storage${random_id.storage.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                = \u001b[38;5;37m\"storage\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.storage.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 36,
+                  "Content": "  resource_group_name = \"${azurerm_resource_group.app.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.app.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 37,
+                  "Content": "  location            = \"${azurerm_resource_group.app.location}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m            = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.app.location\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 38,
+                  "Content": "  account_type        = \"Standard_LRS\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245maccount_type\u001b[0m        = \u001b[38;5;37m\"Standard_LRS\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.app_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 37,
+                  "EndLine": 44
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0011",
+          "AVDID": "AVD-AZU-0011",
+          "Title": "The minimum TLS version for Storage Accounts should be TLS1_2",
+          "Description": "Azure Storage currently supports three versions of the TLS protocol: 1.0, 1.1, and 1.2. \n\nAzure Storage uses TLS 1.2 on public HTTPS endpoints, but TLS 1.0 and TLS 1.1 are still supported for backward compatibility.\n\nThis check will warn if the minimum TLS is not set to TLS1_2.",
+          "Message": "Storage account uses an insecure TLS version.",
+          "Query": "data..",
+          "Resolution": "Use a more recent TLS/SSL policy for the load balancer",
+          "Severity": "CRITICAL",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0011",
+          "References": [
+            "https://docs.microsoft.com/en-us/azure/storage/common/transport-layer-security-configure-minimum-version",
+            "https://avd.aquasec.com/misconfig/avd-azu-0011"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.app_test",
+            "Provider": "Azure",
+            "Service": "storage",
+            "StartLine": 34,
+            "EndLine": 39,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 34,
+                  "Content": "resource \"azurerm_storage_account\" \"app\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_storage_account\"\u001b[0m \u001b[38;5;37m\"app\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 35,
+                  "Content": "  name                = \"storage${random_id.storage.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                = \u001b[38;5;37m\"storage\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.storage.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 36,
+                  "Content": "  resource_group_name = \"${azurerm_resource_group.app.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.app.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 37,
+                  "Content": "  location            = \"${azurerm_resource_group.app.location}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m            = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.app.location\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 38,
+                  "Content": "  account_type        = \"Standard_LRS\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245maccount_type\u001b[0m        = \u001b[38;5;37m\"Standard_LRS\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.app_test",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 60,
+                  "EndLine": 67
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Target": "database/database.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 0,
+        "Failures": 6,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0022",
+          "AVDID": "AVD-AZU-0022",
+          "Title": "Ensure databases are not publicly accessible",
+          "Description": "Database resources should not publicly available. You should limit all access to the minimum that is required for your application to function.",
+          "Message": "Database server has public network access enabled.",
+          "Query": "data..",
+          "Resolution": "Disable public access to database when not required",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0022",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0022"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_production",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 46,
+                  "EndLine": 50
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0022",
+          "AVDID": "AVD-AZU-0022",
+          "Title": "Ensure databases are not publicly accessible",
+          "Description": "Database resources should not publicly available. You should limit all access to the minimum that is required for your application to function.",
+          "Message": "Database server has public network access enabled.",
+          "Query": "data..",
+          "Resolution": "Disable public access to database when not required",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0022",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0022"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_test",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_test",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 69,
+                  "EndLine": 73
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0026",
+          "AVDID": "AVD-AZU-0026",
+          "Title": "Databases should have the minimum TLS set for connections",
+          "Description": "You should not use outdated/insecure TLS versions for encryption. You should be using TLS v1.2+.",
+          "Message": "Database server does not require a secure TLS version.",
+          "Query": "data..",
+          "Resolution": "Use the most modern TLS policies available",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0026",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0026"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_production",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 46,
+                  "EndLine": 50
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0026",
+          "AVDID": "AVD-AZU-0026",
+          "Title": "Databases should have the minimum TLS set for connections",
+          "Description": "You should not use outdated/insecure TLS versions for encryption. You should be using TLS v1.2+.",
+          "Message": "Database server does not require a secure TLS version.",
+          "Query": "data..",
+          "Resolution": "Use the most modern TLS policies available",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0026",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0026"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_test",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_test",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 69,
+                  "EndLine": 73
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0027",
+          "AVDID": "AVD-AZU-0027",
+          "Title": "Auditing should be enabled on Azure SQL Databases",
+          "Description": "Auditing helps you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that could indicate business concerns or suspected security violations.",
+          "Message": "Server does not have an extended audit policy configured.",
+          "Query": "data..",
+          "Resolution": "Enable auditing on Azure SQL databases",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0027",
+          "References": [
+            "https://docs.microsoft.com/en-us/azure/azure-sql/database/auditing-overview",
+            "https://avd.aquasec.com/misconfig/avd-azu-0027"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_production",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 46,
+                  "EndLine": 50
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0027",
+          "AVDID": "AVD-AZU-0027",
+          "Title": "Auditing should be enabled on Azure SQL Databases",
+          "Description": "Auditing helps you maintain regulatory compliance, understand database activity, and gain insight into discrepancies and anomalies that could indicate business concerns or suspected security violations.",
+          "Message": "Server does not have an extended audit policy configured.",
+          "Query": "data..",
+          "Resolution": "Enable auditing on Azure SQL databases",
+          "Severity": "MEDIUM",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0027",
+          "References": [
+            "https://docs.microsoft.com/en-us/azure/azure-sql/database/auditing-overview",
+            "https://avd.aquasec.com/misconfig/avd-azu-0027"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.db_test",
+            "Provider": "Azure",
+            "Service": "database",
+            "StartLine": 22,
+            "EndLine": 29,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 22,
+                  "Content": "resource \"azurerm_sql_server\" \"db\" {",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_sql_server\"\u001b[0m \u001b[38;5;37m\"db\"\u001b[0m {",
+                  "FirstCause": true,
+                  "LastCause": false
+                },
+                {
+                  "Number": 23,
+                  "Content": "  name                         = \"sql-${random_id.dbserver.hex}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mname\u001b[0m                         = \u001b[38;5;37m\"sql-\u001b[0m\u001b[38;5;37m${\u001b[0mrandom_id.dbserver.hex\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 24,
+                  "Content": "  resource_group_name          = \"${azurerm_resource_group.db.name}\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mresource_group_name\u001b[0m          = \u001b[38;5;37m\"\u001b[0m\u001b[38;5;37m${\u001b[0mazurerm_resource_group.db.name\u001b[38;5;37m}\u001b[0m\u001b[38;5;37m\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 25,
+                  "Content": "  location                     = \"West Europe\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mlocation\u001b[0m                     = \u001b[38;5;37m\"West Europe\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 26,
+                  "Content": "  version                      = \"12.0\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mversion\u001b[0m                      = \u001b[38;5;37m\"12.0\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 27,
+                  "Content": "  administrator_login          = \"myadmin\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login\u001b[0m          = \u001b[38;5;37m\"myadmin\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 28,
+                  "Content": "  administrator_login_password = \"Password1234!\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245madministrator_login_password\u001b[0m = \u001b[38;5;37m\"Password1234!\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 29,
+                  "Content": "}",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": true
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "module.db_test",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 69,
+                  "EndLine": 73
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Target": "web_nodes/web_nodes.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 2,
+        "Failures": 4,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0039",
+          "AVDID": "AVD-AZU-0039",
+          "Title": "Password authentication should be disabled on Azure virtual machines",
+          "Description": "Access to virtual machines should be authenticated using SSH keys. Removing the option of password authentication enforces more secure methods while removing the risks inherent with passwords.",
+          "Message": "Linux virtual machine allows password authentication.",
+          "Query": "data..",
+          "Resolution": "Use ssh authentication for virtual machines",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0039",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0039"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.web_nodes_production",
+            "Provider": "Azure",
+            "Service": "compute",
+            "StartLine": 78,
+            "EndLine": 78,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 38,
+                  "Content": "resource \"azurerm_virtual_machine\" \"web\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_virtual_machine\"\u001b[0m \u001b[38;5;37m\"web\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 78,
+                  "Content": "    disable_password_authentication = false",
+                  "IsCause": true,
+                  "Annotation": "false",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mdisable_password_authentication\u001b[0m = \u001b[38;5;166mfalse",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 79,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 80,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "os_profile_linux_config",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 77,
+                  "EndLine": 79
+                }
+              },
+              {
+                "Resource": "azurerm_virtual_machine.web[0]",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 38,
+                  "EndLine": 80
+                }
+              },
+              {
+                "Resource": "module.web_nodes_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 30,
+                  "EndLine": 35
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0039",
+          "AVDID": "AVD-AZU-0039",
+          "Title": "Password authentication should be disabled on Azure virtual machines",
+          "Description": "Access to virtual machines should be authenticated using SSH keys. Removing the option of password authentication enforces more secure methods while removing the risks inherent with passwords.",
+          "Message": "Linux virtual machine allows password authentication.",
+          "Query": "data..",
+          "Resolution": "Use ssh authentication for virtual machines",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0039",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0039"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.web_nodes_production",
+            "Provider": "Azure",
+            "Service": "compute",
+            "StartLine": 78,
+            "EndLine": 78,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 38,
+                  "Content": "resource \"azurerm_virtual_machine\" \"web\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_virtual_machine\"\u001b[0m \u001b[38;5;37m\"web\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 78,
+                  "Content": "    disable_password_authentication = false",
+                  "IsCause": true,
+                  "Annotation": "false",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mdisable_password_authentication\u001b[0m = \u001b[38;5;166mfalse",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 79,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 80,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "os_profile_linux_config",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 77,
+                  "EndLine": 79
+                }
+              },
+              {
+                "Resource": "azurerm_virtual_machine.web[1]",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 38,
+                  "EndLine": 80
+                }
+              },
+              {
+                "Resource": "module.web_nodes_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 30,
+                  "EndLine": 35
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0039",
+          "AVDID": "AVD-AZU-0039",
+          "Title": "Password authentication should be disabled on Azure virtual machines",
+          "Description": "Access to virtual machines should be authenticated using SSH keys. Removing the option of password authentication enforces more secure methods while removing the risks inherent with passwords.",
+          "Message": "Linux virtual machine allows password authentication.",
+          "Query": "data..",
+          "Resolution": "Use ssh authentication for virtual machines",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0039",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0039"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.web_nodes_production",
+            "Provider": "Azure",
+            "Service": "compute",
+            "StartLine": 78,
+            "EndLine": 78,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 38,
+                  "Content": "resource \"azurerm_virtual_machine\" \"web\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_virtual_machine\"\u001b[0m \u001b[38;5;37m\"web\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 78,
+                  "Content": "    disable_password_authentication = false",
+                  "IsCause": true,
+                  "Annotation": "false",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mdisable_password_authentication\u001b[0m = \u001b[38;5;166mfalse",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 79,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 80,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "os_profile_linux_config",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 77,
+                  "EndLine": 79
+                }
+              },
+              {
+                "Resource": "azurerm_virtual_machine.web[2]",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 38,
+                  "EndLine": 80
+                }
+              },
+              {
+                "Resource": "module.web_nodes_production",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 30,
+                  "EndLine": 35
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AZU-0039",
+          "AVDID": "AVD-AZU-0039",
+          "Title": "Password authentication should be disabled on Azure virtual machines",
+          "Description": "Access to virtual machines should be authenticated using SSH keys. Removing the option of password authentication enforces more secure methods while removing the risks inherent with passwords.",
+          "Message": "Linux virtual machine allows password authentication.",
+          "Query": "data..",
+          "Resolution": "Use ssh authentication for virtual machines",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-azu-0039",
+          "References": [
+            "https://avd.aquasec.com/misconfig/avd-azu-0039"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.web_nodes_test",
+            "Provider": "Azure",
+            "Service": "compute",
+            "StartLine": 78,
+            "EndLine": 78,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 38,
+                  "Content": "resource \"azurerm_virtual_machine\" \"web\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"azurerm_virtual_machine\"\u001b[0m \u001b[38;5;37m\"web\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 39,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 78,
+                  "Content": "    disable_password_authentication = false",
+                  "IsCause": true,
+                  "Annotation": "false",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mdisable_password_authentication\u001b[0m = \u001b[38;5;166mfalse",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 79,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 80,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "os_profile_linux_config",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 77,
+                  "EndLine": 79
+                }
+              },
+              {
+                "Resource": "azurerm_virtual_machine.web[0]",
+                "Filename": "web_nodes/web_nodes.tf",
+                "Location": {
+                  "StartLine": 38,
+                  "EndLine": 80
+                }
+              },
+              {
+                "Resource": "module.web_nodes_test",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 53,
+                  "EndLine": 58
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

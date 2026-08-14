@@ -1,0 +1,6 @@
+case_id,reported_issues,KICS,Trivy,Checkov
+P01,1,100,15,33
+P02,8,20,8,5
+P03,8,42,8,9
+P04,22,27,25,15
+P05,12,47,12,62
