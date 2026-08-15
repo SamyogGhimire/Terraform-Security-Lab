@@ -1,61 +1,72 @@
 # Terraform Security Lab
 
-A reproducible experimental framework for evaluating **KICS, Trivy, and Checkov** for Terraform Infrastructure-as-Code (IaC) security misconfiguration detection.
+A reproducible experimental framework for evaluating Terraform Infrastructure-as-Code (IaC) security scanning using KICS, Trivy, Checkov, and a combined multi-scanner detection approach.
 
-## Research Objective
+## Research objective
 
-The project investigates whether combining multiple IaC security scanners provides broader detection coverage than relying on a single scanner.
+The project evaluates whether combining multiple IaC security scanners improves vulnerability detection compared with relying on a single scanner.
 
-The evaluation uses:
+The experiment measures:
 
-- **10 synthetic vulnerable Terraform cases (S01-S10)**
-- **10 secure baseline cases (B01-B10)**
-- **5 public Terraform projects (P01-P05)**
-- Ground-truth validation
-- Precision, recall, F1-score and false-positive-rate analysis
-- Scanner complementarity analysis
-- Custom cross-resource IAM analysis
+- True positives (TP)
+- True negatives (TN)
+- False positives (FP)
+- False negatives (FN)
+- Accuracy
+- Precision
+- Recall
+- F1-score
+- False-positive rate (FPR)
+- Scanner complementarity
+
+Three corpora are evaluated:
+
+1. **Synthetic vulnerable Terraform cases:** S01-S10
+2. **Secure baseline cases:** B01-B10
+3. **Public Terraform projects:** P01-P05
 
 ---
 
-## Repository Structure
+## Repository structure
 
 ```text
 .
 ├── dataset/
 │   ├── synthetic/          # Controlled vulnerable Terraform cases
 │   ├── secure/             # Secure baseline cases
-│   └── public/             # External Terraform projects
-│
+│   ├── public/             # Public Terraform projects
+│   ├── dataset.csv
+│   └── ground_truth.csv
 ├── experiment/
-│   ├── generated/          # CSV/TXT experiment outputs
-│   ├── graphs/             # Final experiment graphs
-│   ├── public_dataset/     # Public corpus analysis
-│   ├── results/            # Calculated metrics
-│   └── scripts/            # Analysis and plotting scripts
-│
+│   ├── generated/          # Generated matrices, metrics and summaries
+│   ├── graphs/             # Experiment figures
+│   ├── public_dataset/     # Public-dataset analysis
+│   ├── results/            # Experiment result tables
+│   ├── scripts/            # Analysis and plotting scripts
+│   └── README.md
 ├── results/
-│   ├── kics/               # KICS raw JSON results
-│   ├── trivy/              # Trivy raw JSON results
-│   ├── checkov/            # Checkov raw JSON results
-│   ├── public/              # Public-corpus scanner results
-│   └── custom-iam.txt      # Cross-resource IAM analysis
-│
+│   ├── kics/
+│   ├── trivy/
+│   ├── checkov/
+│   ├── public/
+│   └── custom-iam.txt
 ├── scripts/
 │   ├── run_kics.sh
 │   ├── run_trivy.sh
 │   └── run_checkov.sh
-│
+├── comparison_report.py
 └── README.md
 ```
 
+Terraform-generated directories such as `.terraform/` and Terraform state files are intentionally excluded from version control.
+
 ---
 
-# 1. Experimental Dataset
+# 1. Experimental dataset
 
-## Synthetic Corpus
+## Synthetic corpus
 
-The synthetic corpus contains ten deliberately vulnerable Terraform configurations.
+Ten intentionally vulnerable Terraform configurations represent common IaC security weaknesses.
 
 | Case | Target vulnerability |
 |---|---|
@@ -70,210 +81,126 @@ The synthetic corpus contains ten deliberately vulnerable Terraform configuratio
 | S09 | Excessive Lambda IAM privileges |
 | S10 | Public/unprotected RDS |
 
-Each case has an explicit ground-truth label.
+## Secure baseline
 
-## Secure Baseline Corpus
+Ten secure configurations, B01-B10, are used to evaluate false-positive behaviour.
 
-B01-B10 represent configurations intended to be secure. They are used to evaluate false-positive behaviour.
+## Public dataset
 
-## Public Corpus
-
-Five external Terraform projects are included:
-
-```text
-P01
-P02
-P03
-P04
-P05
-```
-
-The projects originate from the `galcan/terraform_sec` dataset. Original dataset metadata is retained in each project's `source.txt`.
-
-The public corpus is treated as an **external validation corpus**, rather than being mixed directly into the controlled ground-truth benchmark.
+Five public Terraform projects, P01-P05, were selected from the `galcan/terraform_sec` dataset. The included `source.txt` files preserve the source dataset/project metadata used during the experiment.
 
 ---
 
-# 2. Security Scanners
+# 2. Security scanners
 
-| Tool | Purpose |
-|---|---|
-| KICS | IaC security and compliance scanning |
-| Trivy | Terraform/IaC misconfiguration scanning |
-| Checkov | IaC policy and security scanning |
-| Combined framework | Union of detections/findings across scanners |
+### KICS
 
-KICS is executed through Docker in the supplied script.
+KICS scans Infrastructure-as-Code configurations for security issues.
 
----
-
-# 3. Running the Scanners
-
-From the repository root:
-
-```bash
-./scripts/run_kics.sh
-./scripts/run_trivy.sh
-./scripts/run_checkov.sh
-```
-
-Raw results are saved under:
-
-```text
-results/
-```
-
-Controlled results are separated into:
+Raw results:
 
 ```text
 results/kics/
-results/trivy/
-results/checkov/
+results/public/kics/
 ```
 
-Public-corpus results are stored under:
+### Trivy
+
+Trivy is used for Terraform misconfiguration scanning.
+
+Raw results:
 
 ```text
-results/public/
+results/trivy/
+results/public/trivy/
+```
+
+### Checkov
+
+Checkov provides policy-based IaC security analysis.
+
+Raw results:
+
+```text
+results/checkov/
+results/public/checkov/
 ```
 
 ---
 
-# 4. Experiment Analysis
+# 3. Experimental methodology
 
-The main analysis scripts are:
+Each synthetic and baseline case is independently scanned by all three tools.
 
-```bash
-python3 experiment/scripts/generate_all_results.py
-python3 experiment/scripts/calculate_final_metrics.py
-python3 experiment/scripts/plot_final_metrics.py
+The resulting case-level detection matrix uses:
+
+```text
+1 = target vulnerability detected
+0 = target vulnerability not detected
 ```
 
-Important generated files include:
+The controlled ground truth identifies whether the target vulnerability is intentionally present.
+
+The combined framework uses the union of scanner detections:
+
+```text
+Combined = KICS OR Trivy OR Checkov
+```
+
+This evaluates whether complementary scanners increase detection coverage.
+
+The public projects are analysed separately because their source metadata does not provide the same controlled, one-target-per-case ground truth as the synthetic corpus.
+
+---
+
+# 4. Final controlled-corpus results
+
+The controlled detection matrix is stored in:
 
 ```text
 experiment/generated/detection_matrix.csv
+```
+
+Final metrics are stored in:
+
+```text
 experiment/generated/tool_metrics.csv
-experiment/generated/final_results.csv
-experiment/generated/finding_counts.csv
 experiment/generated/combined_metrics.txt
 experiment/generated/final_experiment_summary.txt
-experiment/generated/public_dataset_results.csv
-experiment/generated/public_findings.csv
 ```
+
+### Final metrics
+
+| Tool | TP | TN | FP | FN | Accuracy | Precision | Recall | F1 | FPR |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| KICS | 9 | 10 | 0 | 1 | 94.74% | 100.00% | 90.00% | 94.74% | 0.00% |
+| Trivy | 9 | 10 | 0 | 1 | 94.74% | 100.00% | 90.00% | 94.74% | 0.00% |
+| Checkov | 10 | 10 | 0 | 0 | 100.00% | 100.00% | 100.00% | 100.00% | 0.00% |
+| Combined | 10 | 10 | 0 | 0 | 100.00% | 100.00% | 100.00% | 100.00% | 0.00% |
+
+> The generated result files are the source of truth if the experiment is rerun.
 
 ---
 
-# 5. Detection Matrix
+# 5. Final experiment graphs
 
-The controlled experiment produces:
-
-```text
-experiment/generated/detection_matrix.csv
-```
-
-The matrix records target-vulnerability detection for each scanner.
-
-```text
-1 = detected
-0 = not detected
-```
-
-Example:
-
-```text
-case_id,corpus,target_vulnerability,ground_truth,KICS,Trivy,Checkov
-S01,synthetic,public_s3_access,1,1,1,1
-S02,synthetic,unrestricted_ssh_security_group,1,1,1,1
-...
-```
-
-The ground truth is used to distinguish correct detection from missed detection.
-
----
-
-# 6. Final Controlled Benchmark
-
-The current controlled benchmark contains:
-
-- 10 vulnerable synthetic cases
-- 10 secure baseline cases
-
-The target-vulnerability detection results are:
-
-| Tool | Vulnerable cases detected |
-|---|---:|
-| KICS | 9/10 |
-| Trivy | 9/10 |
-| Checkov | 10/10 |
-| Combined | 10/10 |
-
-The combined framework takes the union of scanner detections. It therefore provides coverage at least as broad as the individual scanners for the evaluated target vulnerabilities.
-
-**Important:** scanner finding counts are not equivalent to target-vulnerability detection accuracy. A scanner can report additional security or compliance issues that are outside the experiment's target vulnerability.
-
----
-
-# 7. Evaluation Metrics
-
-The framework evaluates:
-
-### Precision
-
-```text
-Precision = TP / (TP + FP)
-```
-
-### Recall
-
-```text
-Recall = TP / (TP + FN)
-```
-
-### F1-score
-
-```text
-F1 = 2 × Precision × Recall / (Precision + Recall)
-```
-
-### False Positive Rate
-
-```text
-FPR = FP / (FP + TN)
-```
-
-Where:
-
-- **TP** = vulnerable case correctly detected
-- **FP** = secure baseline incorrectly flagged
-- **TN** = secure baseline correctly left undetected
-- **FN** = vulnerable case missed
-
-The current generated metric artefacts are available in:
-
-```text
-experiment/generated/tool_metrics.csv
-experiment/generated/final_results.csv
-experiment/results/tool_metrics.csv
-```
-
----
-
-# 8. Final Graphs
-
-All experiment graphs are kept in:
+All figures below are existing experiment outputs under:
 
 ```text
 experiment/graphs/
 ```
 
-## Overall Tool Performance
+## Overall performance
 
-![Final Tool Performance](experiment/graphs/final_tool_performance.png)
+![Final tool performance](experiment/graphs/final_tool_performance.png)
 
-## Detection Comparison
+![Tool performance](experiment/graphs/tool_performance.png)
 
-![Detection Comparison](experiment/graphs/detection_comparison.png)
+![Scanner performance](experiment/graphs/scanner_performance.png)
+
+## Accuracy
+
+![Accuracy](experiment/graphs/accuracy_final.png)
 
 ## Precision
 
@@ -283,55 +210,59 @@ experiment/graphs/
 
 ![Recall](experiment/graphs/recall_final.png)
 
-## F1 Score
+## F1-score
 
-![F1 Score](experiment/graphs/f1_final.png)
+![F1-score](experiment/graphs/f1_final.png)
 
-## False Positive Rate
+## False-positive rate
 
-![False Positive Rate](experiment/graphs/fpr_final.png)
+![False-positive rate](experiment/graphs/fpr_final.png)
 
-## Scanner Complementarity
+## Detection comparison
 
-![Scanner Complementarity](experiment/graphs/scanner_complementarity.png)
+![Detection comparison](experiment/graphs/detection_comparison.png)
 
-## Unique Detection Contribution
+## Scanner findings
 
-![Unique Detection Contribution](experiment/graphs/unique_detection_contribution.png)
+![Scanner findings](experiment/graphs/scanner_findings.png)
 
-## Vulnerable vs Baseline
+## Findings by case
 
-![Vulnerable vs Baseline](experiment/graphs/vulnerable_vs_baseline.png)
+![Findings by case](experiment/graphs/findings_by_case.png)
 
-## Findings by Case
+## Vulnerable versus baseline
 
-![Findings by Case](experiment/graphs/findings_by_case.png)
+![Vulnerable versus baseline](experiment/graphs/vulnerable_vs_baseline.png)
+
+## Scanner complementarity
+
+![Scanner complementarity](experiment/graphs/scanner_complementarity.png)
+
+## Unique detection contribution
+
+![Unique detection contribution](experiment/graphs/unique_detection_contribution.png)
 
 ---
 
-# 9. Public Dataset Validation
+# 6. Public dataset validation
 
-The public corpus is analysed separately because complete ground truth is not available for every finding.
-
-The available projects are:
+The public validation corpus contains:
 
 ```text
-dataset/public/P01
-dataset/public/P02
-dataset/public/P03
-dataset/public/P04
-dataset/public/P05
+P01
+P02
+P03
+P04
+P05
 ```
 
-Scanner outputs:
+Raw scanner results are stored under:
 
 ```text
-results/public/kics/
-results/public/trivy/
-results/public/checkov/
+results/public/
 ```
 
-Generated public-dataset analysis:
+Processed outputs are stored under:
 
 ```text
 experiment/generated/public_dataset_results.csv
@@ -340,55 +271,155 @@ experiment/generated/public_validation.csv
 experiment/generated/public/
 ```
 
-Public-corpus graphs include:
+The five projects contain real Terraform configurations and provide an external validation set. They are intentionally kept separate from the controlled TP/TN/FP/FN evaluation because their externally reported issue counts do not necessarily map one-to-one to individual scanner findings.
 
-![Public Findings by Case](experiment/graphs/public_findings_by_case.png)
+## Public findings by case
 
-![Public Scanner Comparison](experiment/graphs/public_scanner_comparison.png)
+![Public findings by case](experiment/graphs/public_findings_by_case.png)
 
-![Public Scanner Findings](experiment/graphs/public_scanner_findings.png)
+## Average findings
 
-![Public Average Findings](experiment/graphs/public_average_findings.png)
+![Public average findings](experiment/graphs/public_average_findings.png)
 
-The public corpus demonstrates that different scanners report different security findings for the same Terraform projects, supporting the investigation of scanner complementarity.
+## Public scanner comparison
+
+![Public scanner comparison](experiment/graphs/public_scanner_comparison.png)
+
+## Public scanner findings
+
+![Public scanner findings](experiment/graphs/public_scanner_findings.png)
+
+## Public scanner totals
+
+![Public scanner totals](experiment/graphs/public_scanner_totals.png)
+
+## Public ground-truth comparison
+
+![Public ground-truth comparison](experiment/graphs/public_ground_truth_comparison.png)
 
 ---
 
-# 10. Scanner Complementarity
+# 7. Detection matrix
 
-Different scanners use different rule sets, policies, resource coverage and security heuristics.
+The controlled experiment uses a case-level matrix:
 
-Therefore, two scanners can analyse the same Terraform project and produce different findings.
-
-The framework considers:
-
-```text
-Individual detection
-        +
-False-positive behaviour
-        +
-Finding overlap
-        +
-Unique detection contribution
-        =
-Multi-scanner security coverage
+```csv
+case_id,corpus,target_vulnerability,ground_truth,KICS,Trivy,Checkov
+S01,synthetic,public_s3_access,1,1,1,1
+S02,synthetic,unrestricted_ssh_security_group,1,1,1,1
+S03,synthetic,excessive_iam_privileges,1,1,0,1
+...
+B01,baseline,secure_s3_public_access,0,0,0,0
+...
 ```
 
-The combined framework uses the union of detections rather than assuming that one scanner is a complete security oracle.
+The authoritative generated matrix is:
+
+```text
+experiment/generated/detection_matrix.csv
+```
 
 ---
 
-# 11. Cross-Resource IAM Analysis
+# 8. Reproducibility
 
-The repository also includes a custom analysis:
+## Requirements
+
+- Terraform
+- Docker
+- Python 3
+- KICS
+- Trivy
+- Checkov
+
+KICS can be executed through Docker, avoiding the need to install the KICS binary directly on the host.
+
+## Run KICS
+
+```bash
+./scripts/run_kics.sh
+```
+
+## Run Trivy
+
+```bash
+./scripts/run_trivy.sh
+```
+
+## Run Checkov
+
+```bash
+./scripts/run_checkov.sh
+```
+
+Scanner outputs are written to `results/`.
+
+---
+
+# 9. Generate experiment results
+
+After scanning, the analysis pipeline can regenerate the matrices, metrics and graphs:
+
+```bash
+python3 experiment/scripts/build_matrix.py
+python3 experiment/scripts/calculate_metrics.py
+python3 experiment/scripts/calculate_final_metrics.py
+python3 experiment/scripts/complementarity.py
+python3 experiment/scripts/generate_all_results.py
+python3 experiment/scripts/plot_results.py
+python3 experiment/scripts/plot_final_metrics.py
+```
+
+Generated outputs are stored under:
+
+```text
+experiment/generated/
+experiment/results/
+experiment/graphs/
+```
+
+## Public dataset analysis
+
+```bash
+python3 experiment/scripts/analyze_public.py
+```
+
+---
+
+# 10. Combined security validation framework
+
+```text
+                    Terraform IaC
+                         |
+          +--------------+--------------+
+          |              |              |
+          v              v              v
+       KICS           Trivy          Checkov
+          |              |              |
+          +--------------+--------------+
+                         |
+                         v
+              Detection aggregation
+                         |
+                         v
+               Combined result
+```
+
+The framework combines independent scanner outputs so that a target detected by any scanner is included in the combined result.
+
+This is intended to exploit differences in scanner rule coverage.
+
+---
+
+# 11. Cross-resource IAM validation
+
+The repository also contains a custom cross-resource IAM validation component:
 
 ```text
 results/custom-iam.txt
 ```
 
-This addresses security relationships that can span multiple Terraform resources.
-
-One evaluated example combines:
+The S08 case demonstrates a privilege-escalation relationship involving:
 
 ```text
 iam:PassRole
@@ -396,140 +427,78 @@ iam:PassRole
 ec2:RunInstances
 ```
 
-to identify a potential privilege-escalation path.
-
-This complements conventional single-resource scanner rules.
+This illustrates why cross-resource reasoning can complement conventional single-resource scanner rules.
 
 ---
 
-# 12. Reproducibility
+# 12. Key findings
 
-A typical reproduction workflow is:
+The controlled experiment indicates:
 
-```bash
-git clone <repository>
-cd terraform-security-lab
-
-./scripts/run_kics.sh
-./scripts/run_trivy.sh
-./scripts/run_checkov.sh
-
-python3 experiment/scripts/generate_all_results.py
-python3 experiment/scripts/calculate_final_metrics.py
-python3 experiment/scripts/plot_final_metrics.py
-```
-
-Generated artefacts are placed in:
-
-```text
-experiment/generated/
-experiment/graphs/
-```
-
-Scanner versions should be recorded when reproducing the experiment because rule sets and findings can change between releases.
+1. KICS and Trivy achieved high detection coverage but each missed one controlled target in the final matrix.
+2. Checkov detected all ten controlled target vulnerabilities in the final result set.
+3. The combined framework detected all ten controlled vulnerabilities.
+4. The secure baseline corpus enables explicit evaluation of false positives.
+5. The scanners have overlapping but non-identical rule coverage.
+6. The public projects contain substantially more heterogeneous findings than the small controlled corpus.
+7. Cross-resource IAM relationships can require additional analysis beyond isolated rule matching.
+8. Multi-scanner aggregation is therefore a practical strategy for increasing detection coverage.
 
 ---
 
-# 13. Interpretation
+# 13. Limitations
 
-The project distinguishes between two different measurements:
+- The controlled corpus contains only ten vulnerable and ten secure cases.
+- The public validation corpus contains five projects.
+- Scanner results depend on tool versions and rule databases.
+- Public issue metadata does not necessarily correspond one-to-one with scanner findings.
+- Case-level binary detection does not capture the severity or quality of every finding.
+- The combined framework currently uses logical aggregation rather than a learned model.
+- Static IaC analysis does not replace runtime cloud security validation.
 
-### Target-vulnerability detection
-
-Whether a scanner detects the vulnerability explicitly defined by the experiment's ground truth.
-
-### Security finding volume
-
-The total number of security/compliance findings reported by a scanner.
-
-These must not be treated as the same metric.
-
-For example, a scanner can report:
-
-- missing logging;
-- missing tags;
-- encryption recommendations;
-- missing descriptions;
-- monitoring recommendations;
-- IAM policy concerns;
-
-without necessarily detecting the specific target vulnerability.
-
-Therefore:
-
-> **Finding count alone should not be interpreted as detection accuracy.**
+The results should therefore be interpreted as an experimental evaluation of static Terraform IaC security detection.
 
 ---
 
-# 14. Limitations
-
-The current experiment has several limitations:
-
-1. The controlled benchmark is relatively small.
-2. The public validation corpus contains five projects.
-3. Scanner rule sets change between releases.
-4. Different scanners can classify the same underlying weakness differently.
-5. Public projects do not provide complete ground truth for every finding.
-6. Static analysis cannot prove runtime exploitability for every finding.
-7. The combined framework currently uses scanner-result union rather than a learned ensemble model.
-
----
-
-# 15. Future Work
+# 14. Future work
 
 Potential extensions include:
 
-- expanding the public Terraform corpus;
-- adding more vulnerability classes;
-- evaluating additional scanners;
-- version-controlled scanner benchmarking;
-- duplicate-finding normalisation;
-- severity-weighted scoring;
-- automated cross-resource dependency analysis;
-- runtime validation of selected findings;
-- CI/CD integration;
-- SARIF-based result aggregation;
-- larger-scale statistical evaluation.
+- Expanding the public Terraform corpus.
+- Adding additional IaC security scanners.
+- Adding cloud-provider-specific cases.
+- Improving cross-resource analysis.
+- Measuring execution time and resource consumption.
+- Evaluating scanner-version sensitivity.
+- Mapping equivalent findings across scanners.
+- Adding severity-weighted metrics.
+- Evaluating larger benchmark datasets.
+- Integrating the framework into CI/CD pipelines.
 
 ---
 
-# 16. Research Contribution
+# 15. Repository hygiene
 
-The implemented workflow provides a reproducible multi-layer validation approach:
+Terraform provider binaries are generated locally by `terraform init` and must not be committed.
+
+The repository should ignore:
 
 ```text
-Terraform IaC
-      |
-      +---- KICS
-      |
-      +---- Trivy
-      |
-      +---- Checkov
-      |
-      +---- Custom cross-resource analysis
-      |
-      v
-Security findings
-      |
-      v
-Ground-truth validation
-      |
-      v
-Precision / Recall / F1 / FPR
-      |
-      v
-Complementarity analysis
-      |
-      v
-Combined security coverage
+.terraform/
+*.tfstate
+*.tfstate.*
 ```
 
-The main conclusion supported by the experiment is that **multi-tool IaC security validation can provide broader coverage than relying on a single scanner**, while requiring explicit ground truth and careful false-positive analysis.
+These files are reproducible and are not required to reproduce the source Terraform configurations or static analysis experiments.
 
 ---
 
-## Project Status
+# 16. Conclusion
 
-**Research experiment and analysis complete.**
+This repository provides a reproducible environment for evaluating Terraform IaC security scanners.
 
-The repository contains the datasets, raw scanner outputs, ground-truth data, experiment scripts, generated metrics, graphs, public-dataset validation, and custom cross-resource IAM analysis required to reproduce the reported evaluation.
+The controlled experiments show that KICS, Trivy and Checkov have overlapping but non-identical detection behaviour. The combined framework provides a practical mechanism for aggregating complementary scanner detections.
+
+The public Terraform projects provide an additional external validation corpus and demonstrate the diversity of findings encountered in real-world Terraform configurations.
+
+Overall, the project supports the research proposition that **multi-layer IaC security validation can provide broader detection coverage than relying on a single static analysis tool alone**.
