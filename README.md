@@ -194,10 +194,6 @@ experiment/graphs/
 
 ![Final tool performance](experiment/graphs/final_tool_performance.png)
 
-![Tool performance](experiment/graphs/tool_performance.png)
-
-![Scanner performance](experiment/graphs/scanner_performance.png)
-
 ## Accuracy
 
 ![Accuracy](experiment/graphs/accuracy_final.png)
