@@ -1,0 +1,160 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-09-01T20:47:28.755438591+05:30",
+  "ArtifactName": "dataset/independent/iacsecbench/aws-samples_aws-network-hub-for-terraform",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "example-spoke-vpc",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "example-spoke-vpc/modules/network/endpoints.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "example-spoke-vpc/modules/network/flow_logs.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 2,
+        "Failures": 0,
+        "Exceptions": 6
+      }
+    },
+    {
+      "Target": "example-spoke-vpc/modules/network/vpc.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 35
+      }
+    },
+    {
+      "Target": "modules/dns/dns.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/dns/flow_logs.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/dns/vpc.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/network_firewall_vpc/nfw.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 2,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/network_firewall_vpc/vpc.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 2,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/vpc_endpoints/endpoints.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/vpc_endpoints/flow_logs.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/vpc_endpoints/vpc.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    }
+  ]
+}

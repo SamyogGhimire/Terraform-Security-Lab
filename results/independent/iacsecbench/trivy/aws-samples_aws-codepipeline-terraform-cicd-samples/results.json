@@ -1,0 +1,60 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-09-01T20:46:18.991214771+05:30",
+  "ArtifactName": "dataset/independent/iacsecbench/aws-samples_aws-codepipeline-terraform-cicd-samples",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 3,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/codebuild/main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/kms/main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "modules/s3/main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 19,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    }
+  ]
+}

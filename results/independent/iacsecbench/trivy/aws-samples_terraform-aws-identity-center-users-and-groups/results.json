@@ -1,0 +1,30 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-09-01T20:56:06.061272801+05:30",
+  "ArtifactName": "dataset/independent/iacsecbench/aws-samples_terraform-aws-identity-center-users-and-groups",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    }
+  ]
+}

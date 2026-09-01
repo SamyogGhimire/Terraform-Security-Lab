@@ -1,0 +1,168 @@
+scanner,finding,count
+KICS,Resource Not Using Tags,195
+KICS,Name Is Not Snake Case,180
+KICS,Variable Without Description,130
+KICS,Sensitive Port Is Exposed To Wide Private Network,126
+KICS,IAM Access Analyzer Not Enabled,99
+KICS,Output Without Description,52
+KICS,Sensitive Port Is Exposed To Entire Network,48
+KICS,Variable Without Type,47
+KICS,IAM policy allows for data exfiltration,22
+KICS,Unpinned Actions Full Length Commit SHA,21
+KICS,CloudWatch S3 policy Change Alarm Missing,16
+KICS,S3 bucket notifications disabled,12
+KICS,S3 Bucket Without Enabled MFA Delete,11
+KICS,Shield Advanced Not In Use,10
+KICS,S3 Bucket Logging Disabled,8
+KICS,VPC Without Network Firewall,8
+KICS,CloudWatch Log Group Without KMS,8
+KICS,Lambda Function Without Dead Letter Queue,7
+KICS,Lambda Functions Without X-Ray Tracing,7
+KICS,S3 Bucket Policy Accepts HTTP Requests,6
+KICS,CloudWatch Logging Disabled,6
+KICS,VPC FlowLogs Disabled,5
+KICS,KMS Key With Vulnerable Policy,4
+KICS,S3 Bucket Without Versioning,3
+KICS,VPC Subnet Assigns Public IP,3
+KICS,Unrestricted Security Group Ingress,3
+KICS,CloudWatch Without Retention Period Specified,3
+KICS,Security Group Rule Without Description,3
+KICS,SNS Topic Not Encrypted,2
+KICS,IAM Policy Grants Full Permissions,2
+KICS,Kinesis SSE Not Configured,2
+KICS,Security Group Not Used,2
+KICS,Image Version Using 'latest',2
+KICS,ECR Repository Without Policy,2
+KICS,Postgres RDS logging disabled,1
+KICS,No Stack Policy,1
+KICS,SQS With SSE Disabled,1
+KICS,Lambda IAM InvokeFunction Misconfigured,1
+KICS,Stack Notifications Disabled,1
+KICS,API Gateway Deployment Without Access Log Setting,1
+KICS,API Gateway With CloudWatch Logging Disabled,1
+KICS,API Gateway With Open Access,1
+KICS,API Gateway Without Configured Authorizer,1
+KICS,API Gateway Without SSL Certificate,1
+KICS,API Gateway without WAF,1
+KICS,API Gateway Stage Without API Gateway UsagePlan Associated,1
+KICS,API Gateway With Invalid Compression,1
+KICS,AWS EIP not attached to any instance,1
+KICS,ElasticSearch Encryption With KMS Disabled,1
+KICS,Elasticsearch Log Disabled,1
+KICS,Elasticsearch Without IAM Authentication,1
+KICS,IAM Role Policy passRole Allows All,1
+KICS,CloudTrail SNS Topic Name Undefined,1
+KICS,Cognito UserPool Without MFA,1
+KICS,Not Using JSON In CMD And ENTRYPOINT Arguments,1
+KICS,Unpinned Package Version in Pip Install,1
+KICS,Yum install Without Version,1
+KICS,Pip install Keeping Cached Packages,1
+KICS,Missing User Instruction,1
+KICS,ECR Repository Not Encrypted With CMK,1
+KICS,Healthcheck Instruction Missing,1
+KICS,EC2 Instance Has Public IP,1
+KICS,EC2 Not EBS Optimized,1
+KICS,Auto Scaling Group With No Associated ELB,1
+KICS,ELBv2 LB Access Log Disabled,1
+KICS,Autoscaling Groups Supply Tags,1
+KICS,SSM Session Transit Encryption Disabled,1
+KICS,SSO Identity User Unsafe Creation,1
+KICS,Remote Desktop Port Open To Internet,1
+KICS,S3 Bucket Object Not Encrypted,1
+KICS,Unknown Port Exposed To Internet,1
+KICS,SQL Analysis Services Port 2383 (TCP) Is Publicly Accessible,1
+KICS,SQS Policy With Public Access,1
+Trivy,IAM policy should avoid use of wildcards and instead apply the principle of least privilege,44
+Trivy,S3 Bucket Logging,16
+Trivy,S3 encryption should use Customer Managed Keys,14
+Trivy,An egress security group rule allows traffic to /0.,11
+Trivy,S3 Access block should block public ACL,10
+Trivy,S3 Access block should block public policy,10
+Trivy,S3 Access Block should Ignore Public Acl,10
+Trivy,S3 Access block should restrict public bucket to limit access,10
+Trivy,S3 buckets should each define an aws_s3_bucket_public_access_block,10
+Trivy,S3 Data should be versioned,8
+Trivy,CloudWatch log groups should be encrypted using CMK,8
+Trivy,Lambda functions should have X-Ray tracing enabled,7
+Trivy,Unencrypted S3 bucket.,7
+Trivy,An ingress security group rule allows traffic from /0.,3
+Trivy,Missing description for security group rule.,3
+Trivy,Unencrypted SNS topic.,2
+Trivy,Instances in a subnet should not receive a public IP address by default.,2
+Trivy,Ensure that lambda function permission has a source arn specified,2
+Trivy,"VPC Flow Logs is a feature that enables you to capture information about the IP traffic going to and from network interfaces in your VPC. After you've created a flow log, you can view and retrieve its data in Amazon CloudWatch Logs. It is recommended that VPC Flow Logs be enabled for packet ""Rejects"" for VPCs.",2
+Trivy,Enable Performance Insights to detect potential problems,1
+Trivy,RDS Deletion Protection Disabled,1
+Trivy,Unencrypted SQS queue.,1
+Trivy,Domain logging should be enabled for Elastic Search domains,1
+Trivy,Elasticsearch doesn't enforce HTTPS traffic.,1
+Trivy,Elasticsearch domain endpoint is using outdated TLS policy.,1
+Checkov,"Ensure no IAM policies documents allow ""*"" as a statement's resource for restrictable actions",23
+Checkov,Ensure CloudWatch log groups retains logs for at least 1 year,22
+Checkov,Ensure top-level permissions are not set to write-all,17
+Checkov,Ensure IAM policies does not allow write access without constraints,16
+Checkov,Ensure that S3 bucket has cross-region replication enabled,15
+Checkov,Ensure S3 buckets should have event notifications enabled,15
+Checkov,Ensure that an S3 bucket has a lifecycle configuration,13
+Checkov,Ensure that S3 buckets are encrypted with KMS by default,11
+Checkov,Ensure the S3 bucket has access logging enabled,9
+Checkov,Ensure that S3 bucket has a Public Access block,8
+Checkov,Ensure that CloudWatch Log Group is encrypted by KMS,8
+Checkov,Ensure no security groups allow egress from 0.0.0.0:0 to port -1,7
+Checkov,Ensure that AWS Lambda function is configured for function-level concurrent execution limit,7
+Checkov,Ensure that AWS Lambda function is configured inside a VPC,7
+Checkov,Ensure that AWS Lambda function is configured for a Dead Letter Queue(DLQ),7
+Checkov,Ensure AWS Lambda function is configured to validate code-signing,7
+Checkov,X-Ray tracing is enabled for Lambda,7
+Checkov,Ensure IAM policies does not allow permissions management / resource exposure without constraints,6
+Checkov,Ensure all data stored in the S3 bucket have versioning enabled,6
+Checkov,Ensure that CodeBuild projects are encrypted using CMK,6
+Checkov,Ensure IAM policies does not allow data exfiltration,4
+Checkov,Check encryption settings for Lambda environmental variable,4
+Checkov,Ensure that CloudWatch Log Group specifies retention days,3
+Checkov,Ensure all data stored in the SNS topic is encrypted,2
+Checkov,Ensure that Network firewall encryption is via a CMK,2
+Checkov,Ensure VPC subnets do not assign public IP by default,2
+Checkov,Ensure Kinesis Firehose delivery stream is encrypted,2
+Checkov,Ensure that Kinesis Firehose Delivery Streams are encrypted with CMK,2
+Checkov,Ensure that AWS Lambda function permissions delegated to AWS services are limited by SourceArn or SourceAccount,2
+Checkov,Ensure IAM policies does not allow credentials exposure,2
+Checkov,Ensure the base image uses a non latest version tag,2
+Checkov,Ensure VPC flow logging is enabled in all VPCs,2
+Checkov,Ensure the default security group of every VPC restricts all traffic,2
+Checkov,Ensure CodePipeline Artifact store is using a KMS CMK,2
+Checkov,Ensure S3 lifecycle configuration sets period for aborting failed uploads,2
+Checkov,Ensure that enhanced monitoring is enabled for Amazon RDS instances,1
+Checkov,Ensure that RDS instances have performance insights enabled,1
+Checkov,Ensure IAM policies does not allow privilege escalation,1
+Checkov,Ensure that CloudFormation stacks are sending event notifications to an SNS topic,1
+Checkov,Ensure all data stored in the SQS queue is encrypted,1
+Checkov,Ensure Create before destroy for API Gateway,1
+Checkov,Ensure CodeBuild project environments do not have privileged mode enabled,1
+Checkov,Ensure SSM parameters are using KMS CMK,1
+Checkov,Ensure that Network firewalls have deletion protection enabled,1
+Checkov,Ensure Network Firewall Policy defines an encryption configuration that uses a customer managed Key (CMK),1
+Checkov,Ensure Transit Gateways do not automatically accept VPC attachment requests,1
+Checkov,Ensure CloudTrail defines an SNS Topic,1
+Checkov,Ensure every security group and rule has a description,1
+Checkov,Ensure Elasticsearch domains are configured with at least three dedicated master nodes for HA,1
+Checkov,Verify Elasticsearch domain is using an up to date TLS policy,1
+Checkov,Ensure Elasticsearch Domain Audit Logging is enabled,1
+Checkov,Ensure that Elasticsearch is not using the default Security Group,1
+Checkov,Ensure Elasticsearch Domain Logging is enabled,1
+Checkov,Ensure all data stored in the Elasticsearch is encrypted with a CMK,1
+Checkov,Ensure that Elasticsearch is configured inside a VPC,1
+Checkov,Ensure AWS Cognito identity pool does not allow unauthenticated guest access,1
+Checkov,Ensure Logging is enabled for WAF Web Access Control Lists,1
+Checkov,Ensure that Security Groups are attached to another resource,1
+Checkov,Ensure that all EIP addresses allocated to a VPC are attached to EC2 instances,1
+Checkov,Ensure ElasticSearch/OpenSearch has dedicated master node enabled,1
+Checkov,Ensure GuardDuty is enabled to specific org/region,1
+Checkov,Ensure AWS ElasticSearch/OpenSearch Fine-grained access control is enabled,1
+Checkov,Ensure ECS containers are limited to read-only access to root filesystems,1
+Checkov,Ensure that HEALTHCHECK instructions have been added to container images,1
+Checkov,Ensure that a user for the container has been created,1
+Checkov,The build output cannot be affected by user parameters other than the build entry point and the top-level source location. GitHub Actions workflow_dispatch inputs MUST be empty. ,1
+Checkov,Ensure access control lists for S3 buckets are disabled,1
+Checkov,Ensure that EC2 is EBS optimized,1
+Checkov,Ensure no security groups allow ingress from 0.0.0.0:0 to port 3389,1
