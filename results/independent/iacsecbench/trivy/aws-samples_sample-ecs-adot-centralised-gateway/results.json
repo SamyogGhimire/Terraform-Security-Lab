@@ -1,0 +1,423 @@
+{
+  "SchemaVersion": 2,
+  "CreatedAt": "2026-09-01T20:52:47.971145852+05:30",
+  "ArtifactName": "dataset/independent/iacsecbench/aws-samples_sample-ecs-adot-centralised-gateway",
+  "ArtifactType": "filesystem",
+  "Metadata": {
+    "ImageConfig": {
+      "architecture": "",
+      "created": "0001-01-01T00:00:00Z",
+      "os": "",
+      "rootfs": {
+        "type": "",
+        "diff_ids": null
+      },
+      "config": {}
+    }
+  },
+  "Results": [
+    {
+      "Target": ".",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 1,
+        "Failures": 0,
+        "Exceptions": 0
+      }
+    },
+    {
+      "Target": "main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 17,
+        "Failures": 2,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AWS-0057",
+          "AVDID": "AVD-AWS-0057",
+          "Title": "IAM policy should avoid use of wildcards and instead apply the principle of least privilege",
+          "Description": "You should use the principle of least privilege when defining your IAM policies. This means you should specify each exact permission required without using wildcards, as this could cause the granting of access to certain undesired actions, resources and principals.",
+          "Message": "IAM policy document uses sensitive action 'logs:CreateLogStream' on wildcarded resource 'ec25e2df-c11f-4f1f-a864-49b9b356cb3d'",
+          "Query": "data..",
+          "Resolution": "Specify the exact permissions required, and to which resources they should apply instead of using wildcards.",
+          "Severity": "HIGH",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-aws-0057",
+          "References": [
+            "https://docs.aws.amazon.com/IAM/latest/UserGuide/best-practices.html",
+            "https://avd.aquasec.com/misconfig/avd-aws-0057"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "aws_iam_role_policy.flow_logs",
+            "Provider": "AWS",
+            "Service": "iam",
+            "StartLine": 194,
+            "EndLine": 194,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 190,
+                  "Content": "resource \"aws_iam_role_policy\" \"flow_logs\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_iam_role_policy\"\u001b[0m \u001b[38;5;37m\"flow_logs\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 191,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 194,
+                  "Content": "    Version = \"2012-10-17\"",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "    \u001b[38;5;245mVersion\u001b[0m = \u001b[38;5;37m\"2012-10-17\"",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 214,
+                  "Content": "",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": true,
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 215,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "aws_iam_role_policy.flow_logs.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 194,
+                  "EndLine": 194
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.flow_logs.policy",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 193,
+                  "EndLine": 214
+                }
+              },
+              {
+                "Resource": "aws_iam_role_policy.flow_logs",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 190,
+                  "EndLine": 215
+                }
+              }
+            ]
+          }
+        },
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AWS-0104",
+          "AVDID": "AVD-AWS-0104",
+          "Title": "An egress security group rule allows traffic to /0.",
+          "Description": "Opening up ports to connect out to the public internet is generally to be avoided. You should restrict access to IP addresses or ranges that are explicitly required where possible.",
+          "Message": "Security group rule allows egress to multiple public internet addresses.",
+          "Query": "data..",
+          "Resolution": "Set a more restrictive cidr range",
+          "Severity": "CRITICAL",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-aws-0104",
+          "References": [
+            "https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-egress-to-internet.html",
+            "https://avd.aquasec.com/misconfig/avd-aws-0104"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "aws_security_group_rule.ecs_hosts_egress",
+            "Provider": "AWS",
+            "Service": "ec2",
+            "StartLine": 293,
+            "EndLine": 293,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 288,
+                  "Content": "resource \"aws_security_group_rule\" \"ecs_hosts_egress\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_security_group_rule\"\u001b[0m \u001b[38;5;37m\"ecs_hosts_egress\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 289,
+                  "Content": "  type              = \"egress\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mtype\u001b[0m              = \u001b[38;5;37m\"egress\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 290,
+                  "Content": "  from_port         = 0",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mfrom_port\u001b[0m         = \u001b[38;5;37m0",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 291,
+                  "Content": "  to_port           = 0",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mto_port\u001b[0m           = \u001b[38;5;37m0",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 292,
+                  "Content": "  protocol          = \"-1\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mprotocol\u001b[0m          = \u001b[38;5;37m\"-1\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 293,
+                  "Content": "  cidr_blocks       = [\"0.0.0.0/0\"]",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mcidr_blocks\u001b[0m       = [\u001b[38;5;37m\"0.0.0.0/0\"\u001b[0m]",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 294,
+                  "Content": "  security_group_id = aws_security_group.ecs_hosts.id",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245msecurity_group_id\u001b[0m = aws_security_group.ecs_hosts.id",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 295,
+                  "Content": "  description       = \"Allow outbound for AWS API access via VPC endpoints\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mdescription\u001b[0m       = \u001b[38;5;37m\"Allow outbound for AWS API access via VPC endpoints\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 296,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "aws_security_group_rule.ecs_hosts_egress",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 288,
+                  "EndLine": 296
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "Target": "modules/adot-collector/main.tf",
+      "Class": "config",
+      "Type": "terraform",
+      "MisconfSummary": {
+        "Successes": 11,
+        "Failures": 1,
+        "Exceptions": 0
+      },
+      "Misconfigurations": [
+        {
+          "Type": "Terraform Security Check",
+          "ID": "AVD-AWS-0104",
+          "AVDID": "AVD-AWS-0104",
+          "Title": "An egress security group rule allows traffic to /0.",
+          "Description": "Opening up ports to connect out to the public internet is generally to be avoided. You should restrict access to IP addresses or ranges that are explicitly required where possible.",
+          "Message": "Security group rule allows egress to multiple public internet addresses.",
+          "Query": "data..",
+          "Resolution": "Set a more restrictive cidr range",
+          "Severity": "CRITICAL",
+          "PrimaryURL": "https://avd.aquasec.com/misconfig/avd-aws-0104",
+          "References": [
+            "https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/centralized-egress-to-internet.html",
+            "https://avd.aquasec.com/misconfig/avd-aws-0104"
+          ],
+          "Status": "FAIL",
+          "Layer": {},
+          "CauseMetadata": {
+            "Resource": "module.adot_collector",
+            "Provider": "AWS",
+            "Service": "ec2",
+            "StartLine": 226,
+            "EndLine": 226,
+            "Code": {
+              "Lines": [
+                {
+                  "Number": 221,
+                  "Content": "resource \"aws_security_group_rule\" \"egress_all\" {",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[38;5;33mresource\u001b[0m \u001b[38;5;37m\"aws_security_group_rule\"\u001b[0m \u001b[38;5;37m\"egress_all\"\u001b[0m {",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 222,
+                  "Content": "  type              = \"egress\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mtype\u001b[0m              = \u001b[38;5;37m\"egress\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 223,
+                  "Content": "  from_port         = 0",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mfrom_port\u001b[0m         = \u001b[38;5;37m0",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 224,
+                  "Content": "  to_port           = 0",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mto_port\u001b[0m           = \u001b[38;5;37m0",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 225,
+                  "Content": "  protocol          = \"-1\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mprotocol\u001b[0m          = \u001b[38;5;37m\"-1\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 226,
+                  "Content": "  cidr_blocks       = [\"0.0.0.0/0\"]",
+                  "IsCause": true,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m  \u001b[38;5;245mcidr_blocks\u001b[0m       = [\u001b[38;5;37m\"0.0.0.0/0\"\u001b[0m]",
+                  "FirstCause": true,
+                  "LastCause": true
+                },
+                {
+                  "Number": 227,
+                  "Content": "  security_group_id = aws_security_group.adot.id",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245msecurity_group_id\u001b[0m = aws_security_group.adot.id",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 228,
+                  "Content": "  description       = \"Allow all outbound for CloudWatch, X-Ray API calls\"",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "  \u001b[38;5;245mdescription\u001b[0m       = \u001b[38;5;37m\"Allow all outbound for CloudWatch, X-Ray API calls\"",
+                  "FirstCause": false,
+                  "LastCause": false
+                },
+                {
+                  "Number": 229,
+                  "Content": "}",
+                  "IsCause": false,
+                  "Annotation": "",
+                  "Truncated": false,
+                  "Highlighted": "\u001b[0m}",
+                  "FirstCause": false,
+                  "LastCause": false
+                }
+              ]
+            },
+            "Occurrences": [
+              {
+                "Resource": "aws_security_group_rule.egress_all",
+                "Filename": "modules/adot-collector/main.tf",
+                "Location": {
+                  "StartLine": 221,
+                  "EndLine": 229
+                }
+              },
+              {
+                "Resource": "module.adot_collector",
+                "Filename": "main.tf",
+                "Location": {
+                  "StartLine": 489,
+                  "EndLine": 519
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

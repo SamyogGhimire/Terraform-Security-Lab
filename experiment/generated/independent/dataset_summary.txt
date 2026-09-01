@@ -1,0 +1,36 @@
+IaCSecBench Independent Real-World Dataset
+=======================================================
+
+Repositories analysed: 25
+Terraform files: 285
+Terraform LOC: 15226
+Terraform resources: 728
+Terraform modules: 41
+
+Scanner findings
+------------------------------
+KICS: 1094
+Trivy: 185
+Checkov: 286
+Combined raw findings: 1565
+
+Combined findings per 1,000 Terraform LOC: 102.785
+Combined findings per Terraform resource: 2.150
+
+Severity distribution
+------------------------------
+
+KICS
+  INFO: 613
+  LOW: 307
+  MEDIUM: 108
+  HIGH: 66
+
+Trivy
+  HIGH: 111
+  LOW: 45
+  CRITICAL: 17
+  MEDIUM: 12
+
+Checkov
+  NONE: 286

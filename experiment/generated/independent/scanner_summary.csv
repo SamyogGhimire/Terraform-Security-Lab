@@ -1,0 +1,4 @@
+scanner,total_findings,repositories_with_findings,average_findings_per_repository
+KICS,1094,25,43.76
+Trivy,185,13,7.4
+Checkov,286,20,11.44
