@@ -275,6 +275,18 @@ def main():
         if p.is_dir()
     )
 
+    if not any(BASE.rglob("*.tf")):
+        print(
+            "ERROR: no .tf files found under "
+            f"{BASE}. The 25 independent repositories are not "
+            "vendored in this checkout (see dataset/independent/"
+            "MANIFEST.csv to re-clone them before running this "
+            "script). Refusing to overwrite the existing "
+            "repository_metrics.csv / dataset_summary.txt with "
+            "zeroed-out LOC/resource/module counts."
+        )
+        return
+
     rows = []
 
     totals = {
