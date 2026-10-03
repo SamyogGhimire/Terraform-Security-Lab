@@ -1,4 +1,4 @@
-COMBINED SECURITY VALIDATION FRAMEWORK
+RAW FINDING PRESENCE - COMBINED (ANY SCANNER) VIEW
 ==================================================
 
 TP        : 10

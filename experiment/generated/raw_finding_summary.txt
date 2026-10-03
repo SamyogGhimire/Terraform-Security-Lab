@@ -1,5 +1,5 @@
 ======================================================================
-TERRAFORM SECURITY VALIDATION EXPERIMENT
+RAW FINDING PRESENCE ANALYSIS (ANY-FINDING, NOT TARGET-SPECIFIC)
 ======================================================================
 
 DATASET
