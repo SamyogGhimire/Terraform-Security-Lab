@@ -1,0 +1,21 @@
+RESOURCE-LEVEL SCANNER AGREEMENT (25-repo independent benchmark)
+======================================================================
+
+A 'resource' here is <resource_type>.<label>, collapsed across any
+enclosing module path. A tool 'flags' a resource if it produced at
+least one finding on it, regardless of which specific rule fired.
+This is coarser than rule-level matching, which isn't possible
+across tools with incompatible rule-ID namespaces.
+
+Distinct flagged resources across all repos: 562
+
+Flagged by exactly 1 tool(s):   489 (87.01%)
+Flagged by exactly 2 tool(s):    40 ( 7.12%)
+Flagged by exactly 3 tool(s):    33 ( 5.87%)
+
+Mean pairwise Jaccard index across repositories:
+  KICS vs Trivy: 0.0357  (n=25 repos with overlap data)
+  KICS vs Checkov: 0.0669  (n=25 repos with overlap data)
+  Trivy vs Checkov: 0.1925  (n=21 repos with overlap data)
+
+Interpretation: a low Jaccard index and a high share of resources flagged by only one tool both support the complementarity claim - the scanners are largely looking at different parts of each repository's resource graph, not re-flagging the same resources with different rule IDs.
