@@ -1,7 +1,7 @@
 import csv
 import matplotlib.pyplot as plt
 
-INPUT = "experiment/generated/tool_metrics.csv"
+INPUT = "experiment/generated/raw_finding_tool_metrics.csv"
 OUTPUT = "experiment/generated"
 
 with open(INPUT, newline="") as f:
@@ -35,7 +35,7 @@ plt.ylim(0, 110)
 plt.legend()
 plt.tight_layout()
 
-plt.savefig(f"{OUTPUT}/scanner_performance.png", dpi=300)
+plt.savefig(f"{OUTPUT}/raw_finding_scanner_performance.png", dpi=300)
 plt.close()
 
 # --------------------------------------------------
@@ -52,7 +52,7 @@ plt.title("Vulnerability Detection Recall")
 plt.ylim(0, 110)
 plt.tight_layout()
 
-plt.savefig(f"{OUTPUT}/recall_comparison.png", dpi=300)
+plt.savefig(f"{OUTPUT}/raw_finding_recall_comparison.png", dpi=300)
 plt.close()
 
 # --------------------------------------------------
@@ -69,7 +69,7 @@ plt.title("Security Scanner F1-score")
 plt.ylim(0, 110)
 plt.tight_layout()
 
-plt.savefig(f"{OUTPUT}/f1_comparison.png", dpi=300)
+plt.savefig(f"{OUTPUT}/raw_finding_f1_comparison.png", dpi=300)
 plt.close()
 
 # --------------------------------------------------
@@ -88,13 +88,13 @@ plt.title("False Positive Rate Comparison")
 plt.ylim(0, 110)
 plt.tight_layout()
 
-plt.savefig(f"{OUTPUT}/fpr_comparison.png", dpi=300)
+plt.savefig(f"{OUTPUT}/raw_finding_fpr_comparison.png", dpi=300)
 plt.close()
 
 print("==============================================")
 print("GRAPH GENERATION COMPLETE")
 print("==============================================")
-print(f"Generated: {OUTPUT}/scanner_performance.png")
-print(f"Generated: {OUTPUT}/recall_comparison.png")
-print(f"Generated: {OUTPUT}/f1_comparison.png")
-print(f"Generated: {OUTPUT}/fpr_comparison.png")
+print(f"Generated: {OUTPUT}/raw_finding_scanner_performance.png")
+print(f"Generated: {OUTPUT}/raw_finding_recall_comparison.png")
+print(f"Generated: {OUTPUT}/raw_finding_f1_comparison.png")
+print(f"Generated: {OUTPUT}/raw_finding_fpr_comparison.png")

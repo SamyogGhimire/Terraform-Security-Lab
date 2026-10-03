@@ -7,22 +7,26 @@ Evaluate the ability of KICS, Trivy, and Checkov to detect known Terraform secur
 ## Dataset
 
 Synthetic vulnerable cases:
-- S01 — Public S3
-- S02 — Open SSH
-- S03 — Excessive IAM
-- S04 — Hardcoded Credentials
-- S05 — Missing Encryption
+- S01 — Public S3 access
+- S02 — Unrestricted SSH security group
+- S03 — Excessive IAM privileges
+- S04 — Unsecured RDS
+- S05 — Unencrypted S3
+- S06 — Public S3 write access
+- S07 — Unrestricted RDP security group
+- S08 — Dangerous IAM PassRole
+- S09 — Excessive Lambda IAM privileges
+- S10 — Public/unprotected RDS
 
-Secure baseline cases:
-- B01 — Secure S3
-- B02 — Secure SSH configuration
-- B03 — Secure IAM configuration
-- B04 — No hardcoded credentials
-- B05 — Encryption enabled
+Secure baseline cases B01-B10 mirror each S-case's category with the
+vulnerability remediated, and are used to evaluate false-positive behavior.
 
 ## Ground Truth
 
-ground_truth.csv defines whether each case contains the target vulnerability.
+`experiment/data/ground_truth.csv` is the authoritative source read by
+`experiment/scripts/build_matrix.py`. `dataset/ground_truth.csv` is kept as
+an identical copy at the dataset root; if you edit one, copy it to the
+other so they don't drift apart again.
 
 ## Scanner Results
 

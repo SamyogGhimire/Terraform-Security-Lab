@@ -1,6 +1,6 @@
 import csv
 
-with open("experiment/detection_matrix.csv") as f:
+with open("experiment/results/detection_matrix.csv") as f:
     rows = list(csv.DictReader(f))
 
 tools = ["KICS", "Trivy", "Checkov"]

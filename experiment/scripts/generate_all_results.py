@@ -106,7 +106,7 @@ for row in rows:
     detection_rows.append(output)
 
 
-with open("experiment/generated/detection_matrix.csv", "w", newline="") as f:
+with open("experiment/generated/raw_finding_matrix.csv", "w", newline="") as f:
     writer = csv.DictWriter(
         f,
         fieldnames=["case_id", "corpus", "ground_truth"] + TOOLS
@@ -147,7 +147,7 @@ def metrics(tool):
     return TP, TN, FP, FN, precision, recall, f1, accuracy, fpr
 
 
-with open("experiment/generated/tool_metrics.csv", "w", newline="") as f:
+with open("experiment/generated/raw_finding_tool_metrics.csv", "w", newline="") as f:
 
     writer = csv.writer(f)
 
@@ -202,8 +202,8 @@ f1 = 2 * precision * recall / (precision + recall) if precision + recall else 0
 accuracy = (TP + TN) / (TP + TN + FP + FN)
 fpr = FP / (FP + TN) if FP + TN else 0
 
-with open("experiment/generated/combined_metrics.txt", "w") as f:
-    f.write("COMBINED SECURITY VALIDATION FRAMEWORK\n")
+with open("experiment/generated/raw_finding_combined_metrics.txt", "w") as f:
+    f.write("RAW FINDING PRESENCE - COMBINED (ANY SCANNER) VIEW\n")
     f.write("=" * 50 + "\n\n")
     f.write(f"TP        : {TP}\n")
     f.write(f"TN        : {TN}\n")
@@ -220,10 +220,10 @@ with open("experiment/generated/combined_metrics.txt", "w") as f:
 # HUMAN-READABLE SUMMARY
 # ------------------------------------------------------------
 
-with open("experiment/generated/experiment_summary.txt", "w") as f:
+with open("experiment/generated/raw_finding_summary.txt", "w") as f:
 
     f.write("=" * 70 + "\n")
-    f.write("TERRAFORM SECURITY VALIDATION EXPERIMENT\n")
+    f.write("RAW FINDING PRESENCE ANALYSIS (ANY-FINDING, NOT TARGET-SPECIFIC)\n")
     f.write("=" * 70 + "\n\n")
 
     f.write("DATASET\n")
@@ -295,8 +295,8 @@ print("=" * 70)
 print()
 print("Generated:")
 print("  experiment/generated/finding_counts.csv")
-print("  experiment/generated/detection_matrix.csv")
-print("  experiment/generated/tool_metrics.csv")
-print("  experiment/generated/combined_metrics.txt")
-print("  experiment/generated/experiment_summary.txt")
+print("  experiment/generated/raw_finding_matrix.csv")
+print("  experiment/generated/raw_finding_tool_metrics.csv")
+print("  experiment/generated/raw_finding_combined_metrics.txt")
+print("  experiment/generated/raw_finding_summary.txt")
 print()

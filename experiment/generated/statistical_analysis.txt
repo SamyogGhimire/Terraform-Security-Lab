@@ -1,0 +1,26 @@
+STATISTICAL RIGOR: BOOTSTRAP CI AND MCNEMAR'S TEST
+======================================================================
+Controlled corpus size: 20 cases (S01-S10, B01-B10)
+Bootstrap resamples: 10000 (95% percentile interval)
+
+ACCURACY WITH 95% BOOTSTRAP CONFIDENCE INTERVAL
+----------------------------------------------------------------------
+KICS       accuracy =  95.00%  95% CI = [85.00%, 100.00%]
+Trivy      accuracy =  95.00%  95% CI = [85.00%, 100.00%]
+Checkov    accuracy = 100.00%  95% CI = [100.00%, 100.00%]
+Combined   accuracy = 100.00%  95% CI = [100.00%, 100.00%]
+
+Note: with n=20, bootstrap resampling cannot manufacture information the original sample doesn't have. Wide or overlapping intervals mean the point-estimate ranking between tools is not well-resolved at this sample size.
+
+PAIRWISE MCNEMAR'S EXACT TEST (correctness vs ground truth)
+----------------------------------------------------------------------
+H0: the two tools are equally likely to be correct on cases where they disagree. n10 = tool A correct & tool B wrong; n01 = tool A wrong & tool B correct.
+
+KICS       vs Trivy      n10=1 n01=1  p=1.0000  (not significant)
+KICS       vs Checkov    n10=0 n01=1  p=1.0000  (not significant)
+KICS       vs Combined   n10=0 n01=1  p=1.0000  (not significant)
+Trivy      vs Checkov    n10=0 n01=1  p=1.0000  (not significant)
+Trivy      vs Combined   n10=0 n01=1  p=1.0000  (not significant)
+Checkov    vs Combined   n10=0 n01=0  p=1.0000  (not significant)
+
+Interpretation: with only 1-2 discordant cases between any pair of tools, McNemar's test has essentially no power at this sample size. None of the pairwise differences reported here should be read as statistically established; they describe this specific 20-case corpus, not a population of Terraform configurations. A corpus of several hundred independently-sourced cases would be needed before a significance claim is defensible.

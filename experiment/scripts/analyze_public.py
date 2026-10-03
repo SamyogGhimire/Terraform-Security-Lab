@@ -37,10 +37,7 @@ def load_trivy(case):
     return findings
 
 def load_checkov(case):
-    path = (
-        f"results/public/checkov/{case}/"
-        f"results_json.json/results_json.json"
-    )
+    path = f"results/public/checkov/{case}/results_json.json.json"
 
     with open(path) as f:
         data = json.load(f)
