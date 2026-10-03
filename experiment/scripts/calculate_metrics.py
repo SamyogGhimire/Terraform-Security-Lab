@@ -2,7 +2,7 @@ import csv
 
 tools = ["KICS", "Trivy", "Checkov"]
 
-with open("experiment/detection_matrix.csv") as f:
+with open("experiment/results/detection_matrix.csv") as f:
     rows = list(csv.DictReader(f))
 
 print("\n" + "=" * 75)
