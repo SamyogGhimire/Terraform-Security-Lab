@@ -68,13 +68,13 @@ for repo in "$INPUT_DIR"/*; do
     mkdir -p "$KICS_DIR/$repo_id"
 
     if docker run --rm \
-    -v "$(realpath "$repo"):/src:ro" \
-    -v "$(realpath "$KICS_DIR/$repo_id"):/output" \
-    checkmarx/kics:latest scan \
-    -p /src \
-    --report-formats json \
-    --output-path /output \
-    > "$KICS_DIR/$repo_id/console.log" 2>&1
+        -v "$(realpath "$repo"):/src:ro" \
+        -v "$(realpath "$KICS_DIR/$repo_id"):/output" \
+        checkmarx/kics:latest scan \
+        -p /src \
+        --report-formats json \
+        --output-path /output \
+        > "$KICS_DIR/$repo_id/console.log" 2>&1
     then
         echo "KICS: SUCCESS"
         kics_success=$((kics_success + 1))
